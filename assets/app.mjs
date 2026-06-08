@@ -456,17 +456,18 @@ function motionOn() { return document.documentElement.dataset.motion !== 'off'; 
 function celebrate(anchor, message) {
   showNotice(message || '🎉 Crew goal complete — nice work!');
   if (!motionOn()) return;
-  const rect = anchor.getBoundingClientRect();
-  const emojis = ['🎉', '✨', '🦀', '⭐', '🟠'];
-  for (let i = 0; i < 14; i++) {
+  const emojis = ['🎉', '✨', '🦀', '⭐', '🟠', '🎊', '💥', '🟧'];
+  const N = 70;
+  for (let i = 0; i < N; i++) {
     const s = document.createElement('span');
     s.className = 'confetti';
-    s.textContent = emojis[i % emojis.length];
-    s.style.left = (rect.left + Math.random() * rect.width) + 'px';
-    s.style.top = rect.top + 'px';
-    s.style.animationDelay = (Math.random() * 0.25) + 's';
+    s.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    s.style.left = (Math.random() * 100) + 'vw';
+    s.style.fontSize = (0.9 + Math.random() * 1.5) + 'rem';
+    s.style.animationDelay = (Math.random() * 0.7) + 's';
+    s.style.animationDuration = (1.8 + Math.random() * 1.6) + 's';
     document.body.appendChild(s);
-    setTimeout(() => s.remove(), 1800);
+    setTimeout(() => s.remove(), 3600);
   }
 }
 

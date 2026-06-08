@@ -620,9 +620,12 @@ html[data-motion="off"] .glass { background: var(--glass-2); }
 .msg.bot.thinking { animation: pulse 1.3s ease-in-out infinite; }
 @keyframes pulse { 0%,100% { opacity: 0.55; } 50% { opacity: 1; } }
 
-/* celebration confetti */
-.confetti { position: fixed; z-index: 200; pointer-events: none; font-size: 1.1rem; will-change: transform, opacity; animation: fall 1.3s var(--ease) forwards; }
-@keyframes fall { 0% { transform: translateY(0) rotate(0); opacity: 1; } 100% { transform: translateY(60vh) rotate(360deg); opacity: 0; } }
+/* full-screen celebration confetti */
+.confetti { position: fixed; top: -6vh; z-index: 200; pointer-events: none; will-change: transform, opacity; animation: fall 2.4s linear forwards; }
+@keyframes fall {
+  0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(112vh) rotate(620deg); opacity: 0.15; }
+}
 
 /* ---------- Mobile nav ---------- */
 @media (max-width: 720px) {
