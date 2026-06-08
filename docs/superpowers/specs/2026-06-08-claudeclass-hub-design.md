@@ -50,7 +50,9 @@ settings. The whole hub sits behind a shared access gate.
 1. **Hub entry gate (everyone).** First visit shows a glass "Enter the class" screen
    asking for a shared access code. Submit → `POST /api/gate` checks it against
    `HUB_PASSWORD` → on success sets a signed, httpOnly session cookie and reveals the
-   hub. Keeps casual passers-by out.
+   hub. Keeps casual passers-by out. A **"Remember me for 5 days"** checkbox sets the
+   cookie's lifetime to 5 days (persists across browser restarts); unchecked = a
+   session cookie that expires when the browser closes.
    - *Security note (default = soft gate):* because content is read with the Supabase
      anon key, a determined person who finds the API could read content directly even
      without the code. For a class hub this is acceptable. If stronger privacy is
