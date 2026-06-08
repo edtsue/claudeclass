@@ -272,6 +272,7 @@ function buildWizard(root) {
       <p>Claude Code is installed and you're logged in. That's the hard part — nice work.</p>
       <div class="wiz-actions"><button class="btn ghost" id="wiz-restart">Start over</button><a class="btn" href="#/class1">Go to Class 1 →</a></div>`;
     $('#wiz-restart', wrap).onclick = () => { state.os = null; state.step = 0; save(); renderPick(); };
+    celebrate(wrap, "🎉 Claude Code installed — you're ready for class!");
   }
 
   function renderStep() {
@@ -452,8 +453,8 @@ function buildCohorts(root) {
 /* ---------------- delight + personality ---------------- */
 function motionOn() { return document.documentElement.dataset.motion !== 'off'; }
 
-function celebrate(anchor) {
-  showNotice('🎉 Crew goal complete — nice work!');
+function celebrate(anchor, message) {
+  showNotice(message || '🎉 Crew goal complete — nice work!');
   if (!motionOn()) return;
   const rect = anchor.getBoundingClientRect();
   const emojis = ['🎉', '✨', '🦀', '⭐', '🟠'];
