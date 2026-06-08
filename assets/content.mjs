@@ -436,6 +436,10 @@ export const REFERENCE = [
   { cat: 'Terminal & Git', term: 'push', def: 'Upload your saved changes (commits) from your computer to GitHub.', meta: 'Mailing your latest draft to the shared cloud.' },
   { cat: 'Terminal & Git', term: 'pull', def: 'Download the latest changes from GitHub down to your computer.', meta: 'Checking the mailbox for everyone else\'s updates.' },
   { cat: 'Terminal & Git', term: 'branch', def: 'A parallel copy of your project so you can try things without breaking the main one.', meta: 'A "what if?" sandbox next to your real sandcastle.' },
+  { cat: 'Terminal & Git', term: 'main', def: 'The primary, "official" branch of your project — the real version everyone builds from.', meta: 'The master copy of the script everyone acts from.' },
+  { cat: 'Terminal & Git', term: 'checkout', def: 'Switch which branch you\'re currently working on.', meta: 'Changing which TV channel you\'re watching.' },
+  { cat: 'Terminal & Git', term: 'pull request (PR)', def: 'A proposal to merge your branch\'s changes into main, so they can be reviewed first.', meta: 'Asking "can we add my chapter to the book?" before it\'s printed.' },
+  { cat: 'Terminal & Git', term: 'remote / origin', def: 'The cloud copy of your project (usually on GitHub). "origin" is its nickname.', meta: 'The home base your laptop syncs with.' },
   { cat: 'Terminal & Git', term: 'merge', def: 'Combine the changes from one branch into another.', meta: 'Blending two recipe drafts into one final dish.' },
   { cat: 'Terminal & Git', term: 'squash', def: 'Tidy up by combining several small commits into one clean commit.', meta: 'Rolling many scribbled notes into one neat summary.' },
 
