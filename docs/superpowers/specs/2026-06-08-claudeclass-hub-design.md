@@ -32,6 +32,11 @@ instantly.
   address is the Vercel-provided `.vercel.app` URL (no custom domain).
 - **Pattern reuse:** mirrors the DEsolo26 approach (vanilla + Supabase + magic-link
   auth + RLS) and the Bento rich-editor pattern (B/I/U + colour + font-size + clear).
+- **Visual design direction:** simple + premium, "Apple glass" (glassmorphism):
+  frosted translucent panels with backdrop blur, thin light borders, soft shadows,
+  rounded corners, system font (San Francisco-style), generous whitespace, calm
+  palette. Applied consistently across the hub, with the sticky notes (§7) as the
+  most expressive showcase of the aesthetic.
 
 ## 4. Pages & structure
 
@@ -89,11 +94,27 @@ content shipped in the HTML.
 - If a **save** fails, show an error toast and keep the edits in the editor so
   nothing is lost; the instructor can retry.
 
-## 7. Student progress checklists
+## 7. Student-local features (browser-only)
 
+Both features below are private to each student, stored in their browser
+(`localStorage`). No accounts, no database, never visible to the instructor or
+other students. They work even with no internet.
+
+### 7a. Progress checklists
 Each class page has a small checklist of "things to do / things you learned".
-Checked state is stored per student in their browser (`localStorage`). No accounts,
-no DB. Purely a personal progress aid; not visible to the instructor.
+Checked state persists per student. Purely a personal progress aid.
+
+### 7b. Sticky notes (premium glass)
+A private scratchpad students use to take notes during class.
+- **Access:** a floating button present on every page opens a slide-out notes panel
+  (a single shared collection of notes, available anywhere — not per-page).
+- **Notes:** students can create multiple sticky-note cards, edit each card's text
+  inline, and delete cards. Changes auto-save to `localStorage` as they type.
+- **Optional:** a small set of glass colour tints per card (kept minimal).
+- **Design:** the showcase of the "Apple glass" aesthetic — frosted translucent
+  cards with backdrop blur, soft shadows, rounded corners, subtle light borders.
+  Simple and premium; no drag-and-drop, no rich formatting (plain editable text)
+  to keep it clean and reliable.
 
 ## 8. Security
 
@@ -147,9 +168,10 @@ editable live afterward.*
 - Setup page with **Mac/PC tabs**
 - Glossary with **live search**
 - Student **progress checklists** (browser-local)
+- Student **sticky notes** — private glass scratchpad, available on every page (browser-local)
 - **Instructor edit mode**: magic-link login + inline rich-text editing + save
 - Offline/local **cache fallback**
-- Mobile-friendly, beginner-clean visual design
+- **Premium "Apple glass" aesthetic**: mobile-friendly, beginner-clean
 
 ## 11. Non-goals (YAGNI)
 
