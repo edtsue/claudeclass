@@ -329,6 +329,22 @@ async function sendChat() {
 
 /* ---------------- edit mode ---------------- */
 let editing = false;
+async function ensureEditAuth() {
+  try {
+    const res = await fetch('/api/edit', { method: 'GET' });
+    if (!res.ok) return true; // no backend (running locally) → allow
+    const d = await res.json();
+    if (d.allowed) return true;
+    const pw = prompt('Enter the edit password:');
+    if (pw == null || pw === '') return false;
+    const p = await fetch('/api/edit', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password: pw }) });
+    if (p.ok && (await p.json()).allowed) return true;
+    alert('That password didn\'t work.');
+    return false;
+  } catch {
+    return true; // local / offline → allow
+  }
+}
 function toggleEdit(on) {
   editing = on ?? !editing;
   document.body.classList.toggle('editing', editing);
@@ -417,7 +433,10 @@ async function boot() {
   $$('.panel-close').forEach((b) => b.addEventListener('click', closePanels));
   $('#chat-send').addEventListener('click', sendChat);
   $('#chat-text').addEventListener('keydown', (e) => { if (e.key === 'Enter') sendChat(); });
-  $('#btn-edit').addEventListener('click', () => toggleEdit());
+  $('#btn-edit').addEventListener('click', async () => {
+    if (editing) { toggleEdit(false); return; }
+    if (await ensureEditAuth()) toggleEdit(true);
+  });
   $('#edit-done').addEventListener('click', () => toggleEdit(false));
   $$('#edit-toolbar [data-cmd]').forEach((b) => b.addEventListener('mousedown', (e) => {
     e.preventDefault();

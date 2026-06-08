@@ -64,7 +64,7 @@ export default async function handler(req, res) {
     if (!r.ok) {
       const err = await r.text();
       console.error('Gemini error', r.status, err);
-      return res.status(200).json({ text: "I hit a snag reaching my brain. Try again in a moment, or check the Reference page.", _debug: { status: r.status, model: MODEL, err: err.slice(0, 400) } });
+      return res.status(200).json({ text: "I hit a snag reaching my brain. Try again in a moment, or check the Reference page." });
     }
     const data = await r.json();
     const text = data?.candidates?.[0]?.content?.parts?.map((p) => p.text).join('') ||
@@ -72,6 +72,6 @@ export default async function handler(req, res) {
     return res.status(200).json({ text });
   } catch (e) {
     console.error(e);
-    return res.status(200).json({ text: "I'm having trouble connecting right now. The Reference and FAQ pages can help in the meantime!", _debug: { caught: String(e).slice(0, 400), model: MODEL } });
+    return res.status(200).json({ text: "I'm having trouble connecting right now. The Reference and FAQ pages can help in the meantime!" });
   }
 }
