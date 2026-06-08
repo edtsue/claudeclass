@@ -593,4 +593,4 @@ export const ROSTER = [
 export const COHORT_SIZE = 4;
 
 // Order pages appear in the nav.
-export const NAV_ORDER = ['overview', 'setup', 'class1', 'class2', 'class3', 'cohorts', 'reference', 'faq', 'help'];
+export const NAV_ORDER = ['overview', 'setup', 'class1', 'class2', 'class3', 'cohorts', 'reference', 'faq'];
