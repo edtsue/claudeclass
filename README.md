@@ -25,17 +25,19 @@ and the entry gate **opens automatically** until you set a password.
 | `SESSION_SECRET` | Any long random string; signs the login cookies | Gate + edit mode |
 | `GEMINI_KEY` | Your Google Gemini API key | The Claude helper chat |
 | `GEMINI_MODEL` | *(optional)* defaults to `gemini-2.5-flash` | The Claude helper chat |
+| `SUPABASE_SECRET_KEY` | Supabase **secret** key (`sb_secret_…`) — server-only | Saving edits to the cloud |
 
 Until `HUB_PASSWORD` is set the gate stays open; until `GEMINI_KEY` is set the
 helper shows a friendly "not connected yet" message. Nothing breaks.
 
 ## Editing content
-Click the ✏️ button in the top bar to turn on edit mode, click any text, and type.
-- **Without Supabase:** edits save in *your* browser only (great for trying it out).
-- **With Supabase:** edits save to the cloud and everyone sees them. To enable, fill
-  in `assets/config.mjs` (`SUPABASE.url`, `SUPABASE.anonKey`, `INSTRUCTOR_EMAIL`) and
-  create a `hub_content` table (`key` text primary key, `html` text, `updated_at`
-  timestamptz) with Row Level Security: public read, instructor-only write.
+Click the ✏️ button in the top bar, enter `EDIT_PASSWORD`, click any text, and type.
+- **Cloud (Supabase):** `assets/config.mjs` holds the project URL + publishable key
+  (reads), the `hub_content` table exists with public-read RLS, and saves go through
+  `/api/save` using `SUPABASE_SECRET_KEY` (server-only, bypasses RLS). Set that env
+  var in Vercel to turn on shared saving.
+- **Fallback:** if the secret key isn't set, edits save in your browser only and the
+  hub shows a "saved on this device" notice — nothing is lost.
 
 ## Custom domain
 Recommended: a subdomain like **`class.edtsue.com`**. In Vercel → Project → Domains,
