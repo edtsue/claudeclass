@@ -116,6 +116,17 @@ A private scratchpad students use to take notes during class.
   Simple and premium; no drag-and-drop, no rich formatting (plain editable text)
   to keep it clean and reliable.
 
+### 7c. Settings
+A gear button (present on every page) opens a glass settings panel. All settings
+persist per student in `localStorage` and apply across the whole hub:
+- **Theme:** Light / Dark / System (glass treatment adapts to each; default System).
+- **Text size:** Small / Medium / Large (scales base font; aids readability for
+  beginners following along).
+- **Reduce motion:** toggles off blur/animation flourishes for performance or
+  comfort.
+- **Reset my data:** clears this student's notes, checklist progress, and settings
+  (with a confirm step). Does not touch course content.
+
 ## 8. Security
 
 - Only the Supabase **anon key** lives in the repo — safe under RLS.
@@ -169,6 +180,7 @@ editable live afterward.*
 - Glossary with **live search**
 - Student **progress checklists** (browser-local)
 - Student **sticky notes** — private glass scratchpad, available on every page (browser-local)
+- **Settings panel** — light/dark/system theme, text size, reduce motion, reset data (browser-local)
 - **Instructor edit mode**: magic-link login + inline rich-text editing + save
 - Offline/local **cache fallback**
 - **Premium "Apple glass" aesthetic**: mobile-friendly, beginner-clean
