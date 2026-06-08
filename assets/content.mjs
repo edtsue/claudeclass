@@ -223,10 +223,13 @@ source ~/.zshrc</code></pre>
       {
         key: 'class1.try',
         html: `
-          <h3>Try it now</h3>
-          <p>In Claude Code, type this and watch it build:</p>
-          <pre class="cmd"><code>Build a simple to-do app in one HTML file. I can add a task, check it off, and delete it. Make it look clean.</code></pre>
-          <p>Then ask it to <em>"change the background to a soft blue"</em> — that's the whole loop: ask → see → tweak.</p>
+          <h3>Prompt starters — copy &amp; paste 🗣️</h3>
+          <p>Not sure what to say to Claude Code? Start with these. Hit <em>copy</em>, paste, and watch.</p>
+          <pre class="cmd prompt"><code>Build a simple to-do app in one HTML file. I can add a task, check it off, and delete it. Make it look clean.</code></pre>
+          <pre class="cmd prompt"><code>Change the background to a soft blue and make the buttons rounded.</code></pre>
+          <pre class="cmd prompt"><code>Explain what you just built, in plain English.</code></pre>
+          <pre class="cmd prompt"><code>I don't like how it looks — make it more modern.</code></pre>
+          <p class="hint">That's the whole loop: ask → see → tweak. Repeat!</p>
         `,
       },
       {
@@ -283,9 +286,26 @@ source ~/.zshrc</code></pre>
       {
         key: 'class2.try',
         html: `
-          <h3>Try it now</h3>
-          <p>Ask Claude Code:</p>
-          <pre class="cmd"><code>Help me put this project on GitHub and deploy it to Vercel. Walk me through each step.</code></pre>
+          <h3>Prompt starters — copy &amp; paste 🗣️</h3>
+          <pre class="cmd prompt"><code>Help me put this project on GitHub. Walk me through each step.</code></pre>
+          <pre class="cmd prompt"><code>Now deploy it to Vercel and give me the live link.</code></pre>
+          <pre class="cmd prompt"><code>I made a change — help me push it so the live site updates.</code></pre>
+          <pre class="cmd prompt"><code>The deploy failed. Here's the error: [paste it here]. What do I do?</code></pre>
+        `,
+      },
+      {
+        key: 'class2.success',
+        html: `
+          <h3>What success looks like</h3>
+          <p>When your push works, you'll see something like this in the terminal:</p>
+          <div class="term-mock"><div class="term-bar"><span></span><span></span><span></span></div><pre>$ git push
+Enumerating objects: 5, done.
+To github.com:you/my-app.git
+   a1b2c3d..e4f5g6h  main -> main  <span class="ok">✓</span></pre></div>
+          <p>And Vercel will show a green success once it's live:</p>
+          <div class="term-mock"><div class="term-bar"><span></span><span></span><span></span></div><pre><span class="ok">✓ Deployment Ready</span>
+Production: https://my-app.vercel.app</pre></div>
+          <p class="hint">Seeing those? You just put something on the internet. 🎉</p>
         `,
       },
       {
@@ -339,8 +359,11 @@ source ~/.zshrc</code></pre>
       {
         key: 'class3.try',
         html: `
-          <h3>Try it now</h3>
-          <pre class="cmd"><code>I want to build a habit tracker. Ask me a few questions, then propose a simple plan before we build.</code></pre>
+          <h3>Prompt starters — copy &amp; paste 🗣️</h3>
+          <pre class="cmd prompt"><code>I want to build a habit tracker. Ask me a few questions, then propose a simple plan before we build.</code></pre>
+          <pre class="cmd prompt"><code>Build the first feature from the plan. Keep it simple.</code></pre>
+          <pre class="cmd prompt"><code>Add a way to edit and delete items.</code></pre>
+          <pre class="cmd prompt"><code>It works! Help me deploy it and share the link.</code></pre>
         `,
       },
       {
@@ -456,6 +479,50 @@ source ~/.zshrc</code></pre>
       },
     ],
   },
+
+  help: {
+    title: 'Stuck? Start here',
+    nav: 'Stuck?',
+    sections: [
+      {
+        key: 'help.intro',
+        html: `<p class="lead">Everyone gets stuck — it's part of building, not a sign you're doing it wrong. 🦀 Here's how to get unstuck fast.</p>`,
+      },
+      {
+        key: 'help.first',
+        html: `
+          <h3>Try these first (in order)</h3>
+          <ol class="path">
+            <li><strong>Tell Claude what's wrong, in plain English.</strong> "That button doesn't do anything — fix it." It will try again.</li>
+            <li><strong>Ask Claude to explain.</strong> "What did that do, and why didn't it work?" Understanding the problem usually solves it.</li>
+            <li><strong>Ask Clawde 🦀</strong> (the helper in the corner) about any word or step on this hub.</li>
+          </ol>
+        `,
+      },
+      {
+        key: 'help.situations',
+        html: `
+          <h3>Common situations</h3>
+          <div class="faq">
+            <details class="faq-item"><summary>"command not found" / "not recognized"</summary>
+              <div><p>Your computer doesn't know where the tool is yet. See the PATH fix on the <a href="#/setup">Setup</a> page — and remember to close and reopen your terminal afterward.</p></div></details>
+            <details class="faq-item"><summary>Claude changed something I didn't want</summary>
+              <div><p>Just say: "undo that last change." If it already saved, <strong>git</strong> is your time machine — ask "use git to go back to before that change."</p></div></details>
+            <details class="faq-item"><summary>There's a scary red error message</summary>
+              <div><p>Copy the whole error and paste it to Claude with: "I got this error — what does it mean and how do I fix it?" Red text is normal; it's just the computer asking for help.</p></div></details>
+            <details class="faq-item"><summary>My app looks broken / blank</summary>
+              <div><p>Tell Claude exactly what you see ("the page is blank", "the button overlaps the text"). The more specific you are, the faster the fix.</p></div></details>
+            <details class="faq-item"><summary>I'm totally lost</summary>
+              <div><p>That's okay. Go back to the <a href="#/overview">Overview</a>, check "what's next," and take the very next small step. Or ask your instructor — that's what they're here for.</p></div></details>
+          </div>
+        `,
+      },
+      {
+        key: 'help.reassure',
+        html: `<p class="metaphor">🔑 Remember: you <strong>can't break your computer</strong>, and almost everything is undoable with git. Experimenting and fixing is exactly how you learn fastest.</p>`,
+      },
+    ],
+  },
 };
 
 // Reference: flat list of {category, term, def, example?} — rendered grouped,
@@ -525,4 +592,4 @@ export const ROSTER = [
 export const COHORT_SIZE = 4;
 
 // Order pages appear in the nav.
-export const NAV_ORDER = ['overview', 'setup', 'class1', 'class2', 'class3', 'cohorts', 'reference', 'faq'];
+export const NAV_ORDER = ['overview', 'setup', 'class1', 'class2', 'class3', 'cohorts', 'reference', 'faq', 'help'];

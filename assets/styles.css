@@ -232,6 +232,47 @@ figure.shot { margin: 0.9rem 0; }
 figure.shot img { width: 100%; border-radius: var(--radius-sm); border: 1px solid var(--hairline); box-shadow: var(--glass-shadow); display: block; background: #1a1a1a; }
 figure.shot figcaption { font-size: 0.85rem; color: var(--ink-soft); text-align: center; margin-top: 0.45rem; }
 
+/* Prompt-starter cards (natural language, copy-paste) */
+.cmd.prompt { background: var(--accent-soft); }
+.cmd.prompt code { font-family: "Geist", ui-sans-serif, sans-serif; color: var(--ink); white-space: normal; }
+
+/* Hover-to-define glossary tooltips */
+.gloss { border-bottom: 1px dotted var(--accent); cursor: help; position: relative; }
+.gloss-pop {
+  position: absolute; left: 0; bottom: 135%; z-index: 70;
+  width: max-content; max-width: 240px;
+  padding: 0.5rem 0.7rem; border-radius: 10px;
+  background: var(--glass-2); backdrop-filter: blur(18px);
+  border: 1px solid var(--glass-border); box-shadow: var(--glass-shadow);
+  font-size: 0.82rem; font-weight: 400; color: var(--ink); line-height: 1.4;
+  opacity: 0; transform: translateY(4px); pointer-events: none; transition: opacity 0.2s, transform 0.2s;
+}
+.gloss:hover .gloss-pop, .gloss:focus .gloss-pop, .gloss:focus-within .gloss-pop { opacity: 1; transform: none; }
+
+/* Terminal mockups (what success looks like) */
+.term-mock { background: #14110e; border: 1px solid var(--hairline); border-radius: var(--radius-sm); overflow: hidden; margin: 0.7rem 0; }
+.term-bar { display: flex; gap: 0.4rem; padding: 0.5rem 0.7rem; background: rgba(255,255,255,0.05); }
+.term-bar span { width: 11px; height: 11px; border-radius: 50%; }
+.term-bar span:nth-child(1) { background: #e06c5a; }
+.term-bar span:nth-child(2) { background: #e0b250; }
+.term-bar span:nth-child(3) { background: #6ba368; }
+.term-mock pre { margin: 0; padding: 0.9rem 1rem; color: #e8e0d8; font-family: "Geist Mono", monospace; font-size: 0.82rem; overflow-x: auto; white-space: pre-wrap; }
+.term-mock .ok { color: #6bd08a; font-weight: 600; }
+
+/* Overview progress stepper */
+.progress { margin-bottom: 1.6rem; padding-bottom: 1.4rem; border-bottom: 1px solid var(--hairline); }
+.progress-steps { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
+.pstep { flex: 1; min-width: 110px; display: flex; flex-direction: column; gap: 0.15rem; padding: 0.7rem 0.85rem; border-radius: var(--radius-sm); background: var(--glass-2); border: 1px solid var(--hairline); border-top: 3px solid var(--hairline); text-decoration: none; color: var(--ink); transition: transform 0.2s var(--ease); }
+.pstep:hover { transform: translateY(-2px); }
+.pstep .plabel { font-weight: 600; font-size: 0.92rem; }
+.pstep .psub { font-size: 0.78rem; color: var(--ink-soft); }
+.pstep.done { border-top-color: #6ba368; }
+.pstep.done .psub { color: #6ba368; }
+.pstep.next { border-top-color: var(--accent); }
+.pstep.next .psub { color: var(--accent-strong); }
+.pstep.locked { opacity: 0.55; }
+.next-cta { text-decoration: none; display: inline-flex; }
+
 /* Locked (date-gated) pages */
 .locked-card { text-align: center; padding-top: 2.4rem; padding-bottom: 2.4rem; }
 .lock-emoji { font-size: 3rem; margin-bottom: 0.4rem; }

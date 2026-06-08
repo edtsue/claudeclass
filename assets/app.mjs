@@ -190,7 +190,89 @@ function enhance(root, pageId) {
   // cohorts page: dynamic board + dice reshuffle
   if (pageId === 'cohorts') buildCohorts(root);
 
+  // overview: progress stepper
+  if (pageId === 'overview') buildProgress(root);
+
+  // hover-to-define jargon (view mode only, so it never gets saved into content)
+  if (!editing && pageId !== 'reference') glossarize($('.sheet', root));
+
   if (editing) makeEditable(root);
+}
+
+/* ---------------- progress stepper (overview) ---------------- */
+function checklistInfo(pageId) {
+  const page = CONTENT[pageId]; if (!page) return null;
+  for (const s of page.sections) {
+    const m = s.html.match(/data-checklist="([^"]+)"/);
+    if (m) {
+      const total = (s.html.match(/<li/g) || []).length;
+      const state = LS.get('check:' + m[1], {});
+      const done = Object.values(state).filter(Boolean).length;
+      return { total, done };
+    }
+  }
+  return null;
+}
+function buildProgress(root) {
+  const sheet = $('.sheet', root); if (!sheet) return;
+  const steps = [{ id: 'setup', label: 'Setup' }, ...['class1', 'class2', 'class3'].map((id) => ({ id, label: CONTENT[id].nav }))];
+  let next = null;
+  const rows = steps.map((s) => {
+    let state = 'open', sub = 'Open';
+    if (s.id === 'setup') { sub = 'Get ready'; }
+    else if (isLocked(s.id)) { state = 'locked'; sub = 'Locked'; }
+    else { const info = checklistInfo(s.id); if (info && info.total) { if (info.done >= info.total) { state = 'done'; sub = 'Done ✓'; } else sub = `${info.done}/${info.total}`; } }
+    if (!next && state !== 'done' && state !== 'locked') next = s;
+    return { s, state, sub };
+  });
+  if (next) rows.forEach((r) => { if (r.s.id === next.s.id) r.state = (r.state === 'done' ? r.state : 'next'); });
+  const block = el(`
+    <div class="progress">
+      <div class="progress-steps">
+        ${rows.map((r) => `<a class="pstep ${r.state}" href="#/${r.s.id}"><span class="plabel">${r.s.label}</span><span class="psub">${r.sub}</span></a>`).join('')}
+      </div>
+      ${next ? `<a class="btn next-cta" href="#/${next.s.id}">Continue → ${next.label}</a>` : `<p class="hint">🎉 You've finished everything that's open — nice work!</p>`}
+    </div>`);
+  sheet.insertBefore(block, sheet.firstChild);
+}
+
+/* ---------------- hover-to-define glossary ---------------- */
+function glossarize(rootEl) {
+  if (!rootEl) return;
+  const remaining = new Map();
+  for (const r of REFERENCE) { const t = r.term.toLowerCase(); if (/^[a-z]+$/.test(t)) remaining.set(t, r.def); }
+  if (!remaining.size) return;
+  const skip = new Set(['PRE', 'CODE', 'A', 'BUTTON', 'H1', 'H2', 'H3', 'SUMMARY', 'KBD', 'TEXTAREA', 'INPUT']);
+  const walker = document.createTreeWalker(rootEl, NodeFilter.SHOW_TEXT, {
+    acceptNode(node) {
+      if (!node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+      let p = node.parentElement;
+      while (p && p !== rootEl) { if (skip.has(p.tagName) || p.classList.contains('gloss')) return NodeFilter.FILTER_REJECT; p = p.parentElement; }
+      return NodeFilter.FILTER_ACCEPT;
+    },
+  });
+  const nodes = []; let n; while ((n = walker.nextNode())) nodes.push(n);
+  for (const tn of nodes) {
+    if (!remaining.size) break;
+    for (const [term, def] of remaining) {
+      const re = new RegExp(`\\b(${term})\\b`, 'i');
+      const m = re.exec(tn.nodeValue);
+      if (!m) continue;
+      const before = tn.nodeValue.slice(0, m.index);
+      const after = tn.nodeValue.slice(m.index + m[0].length);
+      const span = document.createElement('span');
+      span.className = 'gloss'; span.tabIndex = 0; span.textContent = m[0];
+      const pop = document.createElement('span'); pop.className = 'gloss-pop'; pop.textContent = def;
+      span.appendChild(pop);
+      const frag = document.createDocumentFragment();
+      if (before) frag.appendChild(document.createTextNode(before));
+      frag.appendChild(span);
+      if (after) frag.appendChild(document.createTextNode(after));
+      tn.parentNode.replaceChild(frag, tn);
+      remaining.delete(term);
+      break;
+    }
+  }
 }
 
 /* ---------------- cohorts + dice ---------------- */
