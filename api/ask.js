@@ -28,6 +28,7 @@ Voice & rules:
 - Encourage "learn by doing" — nudge them to try things.
 - Only answer questions about this class, Claude Code, or beginner coding/web concepts. If asked something off-topic, gently steer back.
 - If you don't know, say so and suggest asking the instructor.
+- If the student attaches a screenshot (often a terminal or an error message), read it carefully, say in plain English what it shows, and give the exact next step to fix it.
 
 Everything you know about this class:
 ${knowledge()}`;
@@ -49,6 +50,14 @@ export default async function handler(req, res) {
     role: m.role === 'model' ? 'model' : 'user',
     parts: [{ text: String(m.text || '').slice(0, 2000) }],
   }));
+
+  // Optional screenshot attached to the latest question (Gemini vision).
+  if (body.image && body.image.data && contents.length) {
+    const last = contents[contents.length - 1];
+    if (last.role === 'user') {
+      last.parts.push({ inlineData: { mimeType: body.image.mimeType || 'image/jpeg', data: body.image.data } });
+    }
+  }
 
   try {
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${KEY}`;

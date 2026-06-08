@@ -178,6 +178,7 @@ source ~/.zshrc</code></pre>
             <li><strong>Login page didn't open</strong> — type <code>claude</code> again; it will retry the browser login.</li>
           </ul>
           <p class="hint">Bring any leftover errors to office hours — we'll fix them together.</p>
+          <p class="metaphor">📷 <strong>Stuck on an error?</strong> Tap <strong>Clawde</strong> 🦀 (bottom-right), hit the 📎, and upload a screenshot of your screen — he'll read the error and tell you exactly what to do.</p>
         `,
       },
     ],

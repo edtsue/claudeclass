@@ -70,8 +70,11 @@
     </div>
     <div class="chat-log" id="chat-log"></div>
     <div class="chat-suggest" id="chat-suggest"></div>
+    <div class="chat-attach-preview" id="chat-preview"></div>
     <div class="chat-input">
-      <input type="text" id="chat-text" placeholder="Ask about the class…" autocomplete="off" />
+      <button class="chat-attach" id="chat-attach" title="Attach a screenshot" aria-label="Attach a screenshot">📎</button>
+      <input type="file" id="chat-file" accept="image/*" hidden />
+      <input type="text" id="chat-text" placeholder="Ask, or attach a screenshot…" autocomplete="off" />
       <button class="chat-send" id="chat-send" aria-label="Send">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
       </button>

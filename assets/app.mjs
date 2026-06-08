@@ -473,15 +473,45 @@ function addMsg(role, text, cls = '') {
   const m = el(`<div class="msg ${role} ${cls}"></div>`); m.textContent = text;
   log.appendChild(m); log.scrollTop = log.scrollHeight; return m;
 }
+let pendingImage = null; // { dataUrl, base64, mimeType }
+function clearPending() { pendingImage = null; $('#chat-preview').innerHTML = ''; }
+function showPreview() {
+  $('#chat-preview').innerHTML = `<div class="att"><img src="${pendingImage.dataUrl}" alt="attachment"><button id="att-x" aria-label="Remove">×</button></div>`;
+  $('#att-x').onclick = clearPending;
+}
+function processImage(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const img = new Image();
+      img.onload = () => {
+        const max = 1100; let w = img.width, h = img.height;
+        if (w > max || h > max) { const r = Math.min(max / w, max / h); w = Math.round(w * r); h = Math.round(h * r); }
+        const c = document.createElement('canvas'); c.width = w; c.height = h;
+        c.getContext('2d').drawImage(img, 0, 0, w, h);
+        const dataUrl = c.toDataURL('image/jpeg', 0.82);
+        resolve({ dataUrl, base64: dataUrl.split(',')[1], mimeType: 'image/jpeg' });
+      };
+      img.onerror = reject; img.src = reader.result;
+    };
+    reader.onerror = reject; reader.readAsDataURL(file);
+  });
+}
+
 async function sendChat() {
-  const input = $('#chat-text'); const q = input.value.trim(); if (!q) return;
-  input.value = ''; addMsg('user', q); chatHistory.push({ role: 'user', text: q });
+  const input = $('#chat-text'); const q = input.value.trim();
+  if (!q && !pendingImage) return;
+  input.value = '';
+  const userMsg = addMsg('user', q || '📷 (screenshot)');
+  if (pendingImage) { const im = document.createElement('img'); im.src = pendingImage.dataUrl; im.className = 'msg-img'; userMsg.appendChild(im); }
+  chatHistory.push({ role: 'user', text: q || "Here's a screenshot of my screen — what's happening and how do I fix it?" });
   $('#chat-suggest').style.display = 'none';
+  const imageToSend = pendingImage; clearPending();
   const thinking = addMsg('bot', 'Clawde is thinking…', 'thinking');
   try {
     const res = await fetch('/api/ask', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ messages: chatHistory.slice(-10), page: currentPage() }),
+      body: JSON.stringify({ messages: chatHistory.slice(-10), page: currentPage(), image: imageToSend ? { data: imageToSend.base64, mimeType: imageToSend.mimeType } : undefined }),
     });
     if (!res.ok) throw new Error('bad status ' + res.status);
     const data = await res.json();
@@ -618,6 +648,12 @@ async function boot() {
   $$('.panel-close').forEach((b) => b.addEventListener('click', closePanels));
   $('#chat-send').addEventListener('click', sendChat);
   $('#chat-text').addEventListener('keydown', (e) => { if (e.key === 'Enter') sendChat(); });
+  $('#chat-attach').addEventListener('click', () => $('#chat-file').click());
+  $('#chat-file').addEventListener('change', async (e) => {
+    const f = e.target.files[0]; if (!f) return;
+    try { pendingImage = await processImage(f); showPreview(); } catch { showNotice('Could not read that image.'); }
+    e.target.value = '';
+  });
   $('#btn-edit').addEventListener('click', async () => {
     if (editing) { toggleEdit(false); return; }
     if (await ensureEditAuth()) toggleEdit(true);
