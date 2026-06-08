@@ -226,6 +226,11 @@ kbd {
   font-size: 0.98rem;
 }
 
+/* Screenshots */
+figure.shot { margin: 0.9rem 0; }
+figure.shot img { width: 100%; border-radius: var(--radius-sm); border: 1px solid var(--hairline); box-shadow: var(--glass-shadow); display: block; background: #1a1a1a; }
+figure.shot figcaption { font-size: 0.85rem; color: var(--ink-soft); text-align: center; margin-top: 0.45rem; }
+
 /* Locked (date-gated) pages */
 .locked-card { text-align: center; padding-top: 2.4rem; padding-bottom: 2.4rem; }
 .lock-emoji { font-size: 3rem; margin-bottom: 0.4rem; }

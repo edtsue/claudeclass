@@ -152,6 +152,22 @@ source ~/.zshrc</code></pre>
         `,
       },
       {
+        key: 'setup.success',
+        html: `
+          <h3>What a successful install looks like</h3>
+          <p>When it works, typing <code>claude</code> shows a welcome screen like this — the little Claude, a version number, and your folder:</p>
+          <figure class="shot">
+            <img src="/assets/img/install-welcome.png" alt="Claude Code welcome screen showing the version, model, and your folder" loading="lazy" />
+            <figcaption>The Claude Code welcome screen 🎉</figcaption>
+          </figure>
+          <p>The first time you open a folder, Claude Code asks if it can trust it. Pick <strong>“Yes, I trust this folder”</strong> and press Enter:</p>
+          <figure class="shot">
+            <img src="/assets/img/install-trust.png" alt="Claude Code asking to trust the current folder, with Yes/No options" loading="lazy" />
+            <figcaption>Choose “Yes, I trust this folder” → Enter</figcaption>
+          </figure>
+        `,
+      },
+      {
         key: 'setup.troubleshoot',
         html: `
           <h3>Common snags &amp; fixes</h3>
