@@ -148,15 +148,7 @@ function render() {
 /* ---------------- per-render enhancements ---------------- */
 function enhance(root, pageId) {
   // copy buttons on command blocks
-  $$('.cmd', root).forEach((pre) => {
-    const btn = el(`<button class="copy-btn" type="button">copy</button>`);
-    btn.addEventListener('click', () => {
-      navigator.clipboard.writeText(pre.querySelector('code').innerText.trim());
-      btn.textContent = 'copied!'; btn.classList.add('done');
-      setTimeout(() => { btn.textContent = 'copy'; btn.classList.remove('done'); }, 1400);
-    });
-    pre.appendChild(btn);
-  });
+  $$('.cmd', root).forEach(addCopyBtn);
 
   // tabs (Mac/PC)
   $$('.tabs', root).forEach((tabs) => {
@@ -193,10 +185,142 @@ function enhance(root, pageId) {
   // overview: progress stepper
   if (pageId === 'overview') buildProgress(root);
 
+  // setup: interactive wizard on top
+  if (pageId === 'setup') buildWizard(root);
+
   // hover-to-define jargon (view mode only, so it never gets saved into content)
   if (!editing && pageId !== 'reference') glossarize($('.sheet', root));
 
   if (editing) makeEditable(root);
+}
+
+/* ---------------- shared copy button ---------------- */
+function addCopyBtn(pre) {
+  if (pre.querySelector('.copy-btn')) return;
+  const btn = el(`<button class="copy-btn" type="button">copy</button>`);
+  btn.addEventListener('click', () => {
+    navigator.clipboard.writeText(pre.querySelector('code').innerText.trim());
+    btn.textContent = 'copied!'; btn.classList.add('done');
+    setTimeout(() => { btn.textContent = 'copy'; btn.classList.remove('done'); }, 1400);
+  });
+  pre.appendChild(btn);
+}
+
+/* ---------------- setup wizard (Gemini-guided) ---------------- */
+const WIZ = {
+  mac: {
+    os: 'Mac', shell: 'Terminal',
+    steps: [
+      { title: 'Open Terminal', body: 'Press <kbd>Cmd</kbd>+<kbd>Space</kbd>, type "Terminal", and press Enter.' },
+      { title: 'Install Claude Code', body: 'Paste this and press Enter. No admin password needed — it installs just for you.', cmd: 'curl -fsSL https://claude.ai/install.sh | bash' },
+      { title: 'Start it up', body: 'Launch Claude Code by typing:', cmd: 'claude' },
+      { title: 'Trust the folder & log in', body: 'Choose <strong>"Yes, I trust this folder"</strong> and press Enter, then log in with your Claude account in the browser window that opens.' },
+      { title: 'Check it worked', body: 'Confirm the install — you should see a version number:', cmd: 'claude --version' },
+    ],
+  },
+  pc: {
+    os: 'Windows PC', shell: 'PowerShell',
+    steps: [
+      { title: 'Open PowerShell', body: 'Click Start, type "PowerShell", press Enter. (Not the black "CMD" window.)' },
+      { title: 'Install Claude Code', body: 'Paste this and press Enter. No admin password needed.', cmd: 'irm https://claude.ai/install.ps1 | iex' },
+      { title: 'Start it up', body: 'Launch Claude Code by typing:', cmd: 'claude' },
+      { title: 'Trust the folder & log in', body: 'Choose <strong>"Yes, I trust this folder"</strong> and press Enter, then log in with your Claude account in the browser window that opens.' },
+      { title: 'Check it worked', body: 'Confirm the install — you should see a version number:', cmd: 'claude --version' },
+    ],
+  },
+};
+
+function buildWizard(root) {
+  const sheet = $('.sheet', root); if (!sheet) return;
+  const wrap = el(`<div class="wizard"></div>`);
+  sheet.insertBefore(wrap, sheet.firstChild);
+  const state = LS.get('wizard', { os: null, step: 0 });
+  let shot = null;
+  const save = () => LS.set('wizard', { os: state.os, step: state.step });
+
+  async function ask(text, image, outEl) {
+    outEl.innerHTML = `<p class="wiz-thinking">Clawde is looking…</p>`;
+    const cfg = WIZ[state.os]; const step = cfg && cfg.steps[state.step];
+    const prompt = `I'm a beginner installing Claude Code on ${cfg ? cfg.os : 'my computer'}. I'm on this step: "${step ? step.title : ''}". ${text ? 'My problem: ' + text : 'I attached a screenshot of my screen.'} Tell me in simple steps what is wrong and exactly what to do next.`;
+    try {
+      const res = await fetch('/api/ask', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: [{ role: 'user', text: prompt }], page: 'setup', image: image ? { data: image.base64, mimeType: image.mimeType } : undefined }),
+      });
+      const data = await res.json();
+      outEl.textContent = data.text || "I couldn't read that — try describing what you see.";
+    } catch { outEl.textContent = "I'm having trouble connecting right now. Try office hours or your instructor."; }
+  }
+
+  function renderPick() {
+    wrap.innerHTML = `
+      <div class="wiz-head"><span class="wiz-badge">Setup Wizard</span></div>
+      <h3>Let's get you installed 🦀</h3>
+      <p class="hint">I'll walk you through it one step at a time — and if you get stuck, show me a screenshot.</p>
+      <p><strong>First — which computer are you on?</strong></p>
+      <div class="wiz-os">
+        <button class="wiz-osbtn" data-os="mac">🍎<span>Mac</span></button>
+        <button class="wiz-osbtn" data-os="pc">🪟<span>Windows PC</span></button>
+      </div>`;
+    wrap.querySelectorAll('.wiz-osbtn').forEach((b) => (b.onclick = () => { state.os = b.dataset.os; state.step = 0; save(); renderStep(); }));
+  }
+
+  function renderDone() {
+    wrap.innerHTML = `
+      <div class="wiz-head"><span class="wiz-badge">All done</span></div>
+      <h3>🎉 You're set up!</h3>
+      <p>Claude Code is installed and you're logged in. That's the hard part — nice work.</p>
+      <div class="wiz-actions"><button class="btn ghost" id="wiz-restart">Start over</button><a class="btn" href="#/class1">Go to Class 1 →</a></div>`;
+    $('#wiz-restart', wrap).onclick = () => { state.os = null; state.step = 0; save(); renderPick(); };
+  }
+
+  function renderStep() {
+    const cfg = WIZ[state.os]; if (!cfg) return renderPick();
+    const n = cfg.steps.length;
+    if (state.step >= n) return renderDone();
+    const i = state.step; const step = cfg.steps[i]; shot = null;
+    wrap.innerHTML = `
+      <div class="wiz-head">
+        <span class="wiz-badge">${cfg.os} · ${cfg.shell}</span>
+        <div class="wiz-progress">${cfg.steps.map((s, k) => `<span class="wiz-dot ${k < i ? 'done' : ''} ${k === i ? 'now' : ''}"></span>`).join('')}</div>
+      </div>
+      <h3>Step ${i + 1} of ${n}: ${step.title}</h3>
+      <p>${step.body}</p>
+      ${step.cmd ? `<pre class="cmd"><code>${step.cmd}</code></pre>` : ''}
+      <div class="wiz-actions">
+        ${i > 0 ? `<button class="btn ghost" id="wiz-back">← Back</button>` : ''}
+        <button class="btn" id="wiz-next">${i === n - 1 ? 'It worked — finish 🎉' : 'It worked →'}</button>
+        <button class="btn ghost" id="wiz-stuck">I'm stuck 🆘</button>
+      </div>
+      <div class="wiz-help" id="wiz-help" hidden>
+        <p class="hint">Tell Clawde what happened, or upload a screenshot of your screen:</p>
+        <div class="wiz-help-row">
+          <button class="chat-attach" id="wiz-attach" title="Attach a screenshot" type="button">📎</button>
+          <input type="file" id="wiz-file" accept="image/*" hidden />
+          <input type="text" id="wiz-msg" placeholder="e.g. it says command not found" />
+          <button class="btn" id="wiz-send" type="button">Ask</button>
+        </div>
+        <div class="wiz-preview" id="wiz-preview"></div>
+        <div class="wiz-answer" id="wiz-answer"></div>
+      </div>`;
+    $$('.cmd', wrap).forEach(addCopyBtn);
+    if (i > 0) $('#wiz-back', wrap).onclick = () => { state.step--; save(); renderStep(); };
+    $('#wiz-next', wrap).onclick = () => { state.step++; save(); renderStep(); };
+    $('#wiz-stuck', wrap).onclick = () => { const h = $('#wiz-help', wrap); h.hidden = !h.hidden; };
+    $('#wiz-attach', wrap).onclick = () => $('#wiz-file', wrap).click();
+    $('#wiz-file', wrap).onchange = async (e) => {
+      const f = e.target.files[0]; if (!f) return;
+      try { shot = await processImage(f); $('#wiz-preview', wrap).innerHTML = `<img src="${shot.dataUrl}" alt="attachment">`; } catch { showNotice('Could not read that image.'); }
+      e.target.value = '';
+    };
+    $('#wiz-send', wrap).onclick = () => {
+      const msg = $('#wiz-msg', wrap).value.trim();
+      if (!msg && !shot) { $('#wiz-answer', wrap).textContent = 'Type what happened or attach a screenshot first.'; return; }
+      ask(msg, shot, $('#wiz-answer', wrap));
+    };
+  }
+
+  if (state.os) renderStep(); else renderPick();
 }
 
 /* ---------------- progress stepper (overview) ---------------- */
@@ -247,7 +371,7 @@ function glossarize(rootEl) {
     acceptNode(node) {
       if (!node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
       let p = node.parentElement;
-      while (p && p !== rootEl) { if (skip.has(p.tagName) || p.classList.contains('gloss')) return NodeFilter.FILTER_REJECT; p = p.parentElement; }
+      while (p && p !== rootEl) { if (skip.has(p.tagName) || p.classList.contains('gloss') || p.classList.contains('wizard')) return NodeFilter.FILTER_REJECT; p = p.parentElement; }
       return NodeFilter.FILTER_ACCEPT;
     },
   });

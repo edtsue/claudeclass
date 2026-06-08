@@ -227,6 +227,30 @@ kbd {
   font-size: 0.98rem;
 }
 
+/* Setup wizard */
+.wizard { border: 1.5px solid var(--accent); background: linear-gradient(180deg, var(--accent-soft), transparent 90%); border-radius: var(--radius-sm); padding: 1.1rem 1.2rem; margin-bottom: 1.8rem; }
+.wiz-head { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; }
+.wiz-badge { font-family: "Geist Mono", monospace; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.12em; color: #fff; background: var(--accent); padding: 0.2rem 0.6rem; border-radius: 999px; }
+.wizard h3 { margin: 0.6rem 0; }
+.wizard p { margin: 0.5rem 0; }
+.wiz-os { display: flex; gap: 0.8rem; margin-top: 0.6rem; }
+.wiz-osbtn { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 0.3rem; padding: 1.1rem; font-size: 1.7rem; border: 1px solid var(--hairline); background: var(--glass-2); border-radius: var(--radius-sm); cursor: pointer; color: var(--ink); transition: transform 0.2s var(--ease), border-color 0.2s; }
+.wiz-osbtn span { font-size: 0.9rem; font-weight: 600; }
+.wiz-osbtn:hover { transform: translateY(-3px); border-color: var(--accent); }
+.wiz-progress { display: flex; gap: 0.3rem; margin-left: auto; }
+.wiz-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--hairline); transition: all 0.2s; }
+.wiz-dot.done { background: #6ba368; }
+.wiz-dot.now { background: var(--accent); transform: scale(1.3); }
+.wiz-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.9rem; }
+.wiz-help { margin-top: 0.9rem; padding-top: 0.9rem; border-top: 1px solid var(--hairline); }
+.wiz-help-row { display: flex; gap: 0.5rem; align-items: center; }
+.wiz-help-row input[type="text"] { flex: 1; padding: 0.55rem 0.7rem; border-radius: 10px; border: 1px solid var(--hairline); background: var(--glass); color: var(--ink); font-family: inherit; }
+.wiz-help-row input[type="text"]:focus { outline: 2px solid var(--accent); }
+.wiz-preview img { max-height: 64px; border-radius: 8px; margin-top: 0.5rem; border: 1px solid var(--hairline); }
+.wiz-answer { margin-top: 0.6rem; }
+.wiz-answer:not(:empty) { background: var(--glass-2); border: 1px solid var(--hairline); border-radius: 10px; padding: 0.7rem 0.85rem; white-space: pre-wrap; font-size: 0.92rem; line-height: 1.5; }
+.wiz-thinking { font-style: italic; color: var(--ink-soft); }
+
 /* Screenshots */
 figure.shot { margin: 0.9rem 0; }
 figure.shot img { width: 100%; border-radius: var(--radius-sm); border: 1px solid var(--hairline); box-shadow: var(--glass-shadow); display: block; background: #1a1a1a; }
