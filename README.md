@@ -21,7 +21,8 @@ and the entry gate **opens automatically** until you set a password.
 | Variable | What it does | Needed for |
 |---|---|---|
 | `HUB_PASSWORD` | The shared access code students type to enter | The entry gate |
-| `SESSION_SECRET` | Any long random string; signs the login cookie | The entry gate |
+| `EDIT_PASSWORD` | Password to unlock instructor edit mode (✏️) | Edit mode |
+| `SESSION_SECRET` | Any long random string; signs the login cookies | Gate + edit mode |
 | `GEMINI_KEY` | Your Google Gemini API key | The Claude helper chat |
 | `GEMINI_MODEL` | *(optional)* defaults to `gemini-2.5-flash` | The Claude helper chat |
 
