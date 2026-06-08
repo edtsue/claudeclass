@@ -106,6 +106,24 @@
     </div>
   </div>
 
+  <!-- Edit-mode password (in-hub, not a browser popup) -->
+  <div class="gate" id="edit-gate" style="display:none">
+    <div class="gate-card glass">
+      <span class="gate-mascot" data-mascot></span>
+      <div class="eyebrow">Instructor</div>
+      <h1>Edit mode</h1>
+      <p>Enter the edit password to make changes.</p>
+      <form id="edit-gate-form">
+        <input type="password" id="edit-pw" placeholder="Edit password" autocomplete="current-password" />
+        <div class="gate-actions">
+          <button class="btn ghost" type="button" id="edit-gate-cancel">Cancel</button>
+          <button class="btn" type="submit" style="justify-content:center">Unlock</button>
+        </div>
+        <div class="gate-err" id="edit-gate-err"></div>
+      </form>
+    </div>
+  </div>
+
   <!-- Supabase (optional; only used if config.mjs is filled in) -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script type="module" src="/assets/app.mjs"></script>

@@ -306,7 +306,9 @@ ul.todo li.checked { color: var(--ink-soft); text-decoration: line-through; text
 @media (max-width: 640px) { .platforms { grid-template-columns: 1fr; } }
 
 /* Cohort cards */
-.cohorts { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; }
+.cohorts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.7rem; }
+@media (max-width: 720px) { .cohorts { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 440px) { .cohorts { grid-template-columns: 1fr; } }
 .cohort-card { background: var(--glass-2); border: 1px solid var(--hairline); border-radius: var(--radius-sm); padding: 1rem 1.1rem; border-top: 3px solid var(--accent); }
 .cohort-card[data-c="2"] { border-top-color: #6ba368; }
 .cohort-card[data-c="3"] { border-top-color: #5b8fb0; }
@@ -456,6 +458,8 @@ ul.todo li.checked { color: var(--ink-soft); text-decoration: line-through; text
 .gate-card input:focus { outline: 2px solid var(--accent); }
 .gate-remember { display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin: 1rem 0; font-size: 0.9rem; color: var(--ink-soft); }
 .gate-err { color: var(--accent-strong); font-size: 0.88rem; min-height: 1.2em; margin-top: 0.6rem; }
+.gate-actions { display: flex; gap: 0.5rem; margin-top: 1rem; }
+.gate-actions .btn { flex: 1; justify-content: center; }
 
 /* Edit mode */
 body.editing [data-region] { outline: 2px dashed var(--accent); outline-offset: 6px; border-radius: 8px; transition: outline 0.2s; }

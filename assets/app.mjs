@@ -367,17 +367,28 @@ async function ensureEditAuth() {
   try {
     const res = await fetch('/api/edit', { method: 'GET' });
     if (!res.ok) return true; // no backend (running locally) → allow
-    const d = await res.json();
-    if (d.allowed) return true;
-    const pw = prompt('Enter the edit password:');
-    if (pw == null || pw === '') return false;
-    const p = await fetch('/api/edit', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password: pw }) });
-    if (p.ok && (await p.json()).allowed) return true;
-    alert('That password didn\'t work.');
-    return false;
+    if ((await res.json()).allowed) return true;
   } catch {
     return true; // local / offline → allow
   }
+  // Need the password — show the in-hub panel (no browser popup).
+  return new Promise((resolve) => {
+    const modal = $('#edit-gate'), form = $('#edit-gate-form');
+    const input = $('#edit-pw'), err = $('#edit-gate-err');
+    err.textContent = ''; input.value = '';
+    modal.style.display = 'grid';
+    setTimeout(() => input.focus(), 60);
+    const close = (val) => { modal.style.display = 'none'; form.onsubmit = null; $('#edit-gate-cancel').onclick = null; resolve(val); };
+    form.onsubmit = async (e) => {
+      e.preventDefault(); err.textContent = '';
+      try {
+        const p = await fetch('/api/edit', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password: input.value }) });
+        if (p.ok && (await p.json()).allowed) return close(true);
+        err.textContent = "That password didn't work.";
+      } catch { err.textContent = 'Something went wrong — try again.'; }
+    };
+    $('#edit-gate-cancel').onclick = () => close(false);
+  });
 }
 function toggleEdit(on) {
   editing = on ?? !editing;
