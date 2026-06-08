@@ -112,10 +112,10 @@ export const CONTENT = {
                   <pre class="cmd"><code>claude</code></pre>
                 </li>
                 <li>A browser opens — log in with your Claude account. Done! 🎉</li>
-                <li><strong>If it says "command not found":</strong> your Mac just needs to know where Claude Code lives. Mac's Terminal uses <em>zsh</em>, so paste these two lines:
+                <li><strong>If it says "command not found":</strong> your Mac just needs to know where Claude Code lives. It's installed in a <em>hidden</em> folder inside your account: <code>~/.local/bin</code> (that's <code>/Users/your-name/.local/bin</code>). Terminal uses <em>zsh</em>, so paste these two lines to point it there:
                   <pre class="cmd"><code>echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc
 source ~/.zshrc</code></pre>
-                  Then type <code>claude</code> again.
+                  Then type <code>claude</code> again. <span class="hint">(To see the hidden folder in Finder, press <kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>.</kbd>)</span>
                 </li>
               </ol>
             </div>
@@ -132,9 +132,9 @@ source ~/.zshrc</code></pre>
                   <pre class="cmd"><code>claude</code></pre>
                 </li>
                 <li>A browser opens — log in with your Claude account. Done! 🎉</li>
-                <li><strong>If it says "not recognized":</strong> add Claude Code to your <em>personal</em> PATH (no admin needed). Paste this in PowerShell:
+                <li><strong>If it says "not recognized":</strong> Claude Code installed in a <em>hidden</em> folder inside your account — <code>C:\Users\your-name\.local\bin</code> — and Windows doesn't know to look there yet. Add it to your <em>personal</em> PATH (no admin needed) by pasting this in PowerShell:
                   <pre class="cmd"><code>[Environment]::SetEnvironmentVariable("PATH", "$env:PATH;$env:USERPROFILE\.local\bin", "User")</code></pre>
-                  Then close PowerShell, open it again, and type <code>claude</code>.
+                  Then close PowerShell, open it again, and type <code>claude</code>. <span class="hint">(To see the hidden folder in File Explorer: View → Show → Hidden items.)</span>
                 </li>
               </ol>
             </div>
