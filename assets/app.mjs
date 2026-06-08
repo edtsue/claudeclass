@@ -122,7 +122,7 @@ function render() {
         <div class="eyebrow">${page.nav}</div>
         <h1>${page.title}</h1>
       </header>
-      <div class="sheet glass reveal locked-card">
+      <div class="sheet reveal locked-card">
         <div class="lock-emoji">🔒</div>
         <h3>This unlocks soon</h3>
         <p>Opens <strong>${unlockLabel(page.unlock)}</strong>.</p>
@@ -137,7 +137,7 @@ function render() {
       <div class="eyebrow">${id === 'overview' ? 'ClaudeClass' : page.nav}</div>
       <h1>${page.title}</h1>
     </header>
-    <div class="sheet glass reveal">
+    <div class="sheet reveal">
       ${page.sections.map((s) => `<div class="region" data-region="${s.key}">${html(s.key)}</div>`).join('')}
     </div>`;
 

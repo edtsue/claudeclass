@@ -86,7 +86,6 @@ body::before {
     radial-gradient(55% 45% at 88% 18%, var(--glow-b), transparent 62%),
     radial-gradient(70% 60% at 70% 100%, var(--accent-soft), transparent 65%),
     linear-gradient(180deg, var(--bg-0), var(--bg-1));
-  filter: saturate(1.05);
 }
 body::after {
   content: "";
@@ -101,8 +100,8 @@ body::after {
 /* ---------- Glass primitive ---------- */
 .glass {
   background: var(--glass);
-  backdrop-filter: blur(22px) saturate(1.4);
-  -webkit-backdrop-filter: blur(22px) saturate(1.4);
+  backdrop-filter: blur(14px) saturate(1.1);
+  -webkit-backdrop-filter: blur(14px) saturate(1.1);
   border: 1px solid var(--glass-border);
   box-shadow: var(--glass-shadow);
 }
@@ -199,6 +198,12 @@ main {
   margin-top: 1.4rem;
   padding: clamp(1.2rem, 4vw, 2.2rem);
   border-radius: var(--radius);
+  /* No backdrop-filter here on purpose: this surface is large + always on screen,
+     so blurring it is the single most expensive paint. A more-opaque translucent
+     fill keeps the look without the GPU cost. */
+  background: var(--glass-2);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
 }
 .sheet .region + .region { margin-top: 1.6rem; padding-top: 1.6rem; border-top: 1px solid var(--hairline); }
 
