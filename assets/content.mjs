@@ -61,6 +61,7 @@ export const CONTENT = {
           <p class="lead">Goal: get Claude Code installed and logged in before Class 1.
           Pick your computer below and follow the steps. It usually takes under 5 minutes.</p>
           <p class="hint">Don't worry if the terminal looks intimidating — you'll mostly copy and paste. That's normal and allowed!</p>
+          <p class="metaphor">✅ <strong>No admin password needed.</strong> Claude Code installs just for you, inside your own account (a folder called <code>.local/bin</code>) — like keeping a tool in your own desk drawer, not the building's supply closet. Great for a locked-down work laptop.</p>
         `,
       },
       {
@@ -78,31 +79,47 @@ export const CONTENT = {
         key: 'setup.install',
         html: `
           <h3>Install Claude Code</h3>
-          <div class="tabs" data-tabs="setup-install">
-            <div class="tabbar" role="tablist">
-              <button class="tab is-active" data-tab="mac">macOS</button>
-              <button class="tab" data-tab="pc">Windows (PC)</button>
+          <p class="hint">Find your computer below and follow <strong>only that side</strong>.</p>
+          <div class="platforms">
+
+            <div class="platform-card" data-os="mac">
+              <div class="platform-head">🍎 Mac — use <strong>Terminal</strong></div>
+              <ol class="steps">
+                <li>Open <em>Terminal</em>: press <kbd>Cmd</kbd>+<kbd>Space</kbd>, type "Terminal", hit Enter.</li>
+                <li>Paste this and press Enter:
+                  <pre class="cmd"><code>curl -fsSL https://claude.ai/install.sh | bash</code></pre>
+                </li>
+                <li>When it finishes, start Claude Code:
+                  <pre class="cmd"><code>claude</code></pre>
+                </li>
+                <li>A browser opens — log in with your Claude account. Done! 🎉</li>
+                <li><strong>If it says "command not found":</strong> your Mac just needs to know where Claude Code lives. Mac's Terminal uses <em>zsh</em>, so paste these two lines:
+                  <pre class="cmd"><code>echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc
+source ~/.zshrc</code></pre>
+                  Then type <code>claude</code> again.
+                </li>
+              </ol>
             </div>
 
-            <div class="tabpane is-active" data-pane="mac">
-              <p><strong>1.</strong> Open <em>Terminal</em> (press <kbd>Cmd</kbd>+<kbd>Space</kbd>, type "Terminal", hit Enter).</p>
-              <p><strong>2.</strong> Paste this and press Enter:</p>
-              <pre class="cmd"><code>curl -fsSL https://claude.ai/install.sh | bash</code></pre>
-              <p><strong>3.</strong> When it finishes, start it by typing:</p>
-              <pre class="cmd"><code>claude</code></pre>
-              <p><strong>4.</strong> A browser window opens — log in with your Claude account to connect. Done!</p>
+            <div class="platform-card" data-os="win">
+              <div class="platform-head">🪟 Windows — use <strong>PowerShell</strong></div>
+              <ol class="steps">
+                <li>Open <em>PowerShell</em>: Start menu → type "PowerShell" → Enter. <span class="hint">Not the black "CMD" window.</span></li>
+                <li>Paste this and press Enter:
+                  <pre class="cmd"><code>irm https://claude.ai/install.ps1 | iex</code></pre>
+                  <span class="hint">(There's also <code>winget install Anthropic.ClaudeCode</code>, but it can ask for an admin password — if so, use the command above instead.)</span>
+                </li>
+                <li>When it finishes, start Claude Code:
+                  <pre class="cmd"><code>claude</code></pre>
+                </li>
+                <li>A browser opens — log in with your Claude account. Done! 🎉</li>
+                <li><strong>If it says "not recognized":</strong> add Claude Code to your <em>personal</em> PATH (no admin needed). Paste this in PowerShell:
+                  <pre class="cmd"><code>[Environment]::SetEnvironmentVariable("PATH", "$env:PATH;$env:USERPROFILE\.local\bin", "User")</code></pre>
+                  Then close PowerShell, open it again, and type <code>claude</code>.
+                </li>
+              </ol>
             </div>
 
-            <div class="tabpane" data-pane="pc">
-              <p><strong>1.</strong> Open <em>PowerShell</em> (Start menu → type "PowerShell" → Enter). <span class="hint">Not the old "CMD" window.</span></p>
-              <p><strong>2.</strong> Paste this and press Enter:</p>
-              <pre class="cmd"><code>irm https://claude.ai/install.ps1 | iex</code></pre>
-              <p><strong>or</strong>, if you use the Windows package manager:</p>
-              <pre class="cmd"><code>winget install Anthropic.ClaudeCode</code></pre>
-              <p><strong>3.</strong> Start it by typing:</p>
-              <pre class="cmd"><code>claude</code></pre>
-              <p><strong>4.</strong> A browser window opens — log in with your Claude account. Done!</p>
-            </div>
           </div>
         `,
       },
@@ -311,30 +328,7 @@ export const CONTENT = {
         html: `
           <p class="lead">Your cohort is your <strong>pit crew</strong> — a small team to think out loud with,
           get unstuck with, and celebrate wins with. You're grouped randomly into four teams of four.</p>
-          <p class="hint">Find your name, meet your crew, and sit together.</p>
-        `,
-      },
-      {
-        key: 'cohorts.groups',
-        html: `
-          <div class="cohorts">
-            <div class="cohort-card" data-c="1">
-              <h3>Cohort 1</h3>
-              <ul><li>Richard D.</li><li>Tiff N.</li><li>Lizzie M</li><li>Stefi P</li></ul>
-            </div>
-            <div class="cohort-card" data-c="2">
-              <h3>Cohort 2</h3>
-              <ul><li>Kevyn K</li><li>Robin H</li><li>Yu T</li><li>Ryu N</li></ul>
-            </div>
-            <div class="cohort-card" data-c="3">
-              <h3>Cohort 3</h3>
-              <ul><li>Zoe M</li><li>Jineen C</li><li>Ian F</li><li>Hayley M</li></ul>
-            </div>
-            <div class="cohort-card" data-c="4">
-              <h3>Cohort 4</h3>
-              <ul><li>Joshua E</li><li>Gianfranco L</li><li>Christina K</li><li>Vale P</li></ul>
-            </div>
-          </div>
+          <p class="hint">Find your name, meet your crew, and sit together. Press the 🎲 to draw new teams.</p>
         `,
       },
     ],
@@ -478,6 +472,15 @@ export const REFERENCE = [
   { cat: 'Claude Code commands', term: 'statusline', def: 'The customizable info bar at the bottom of Claude Code.' },
   { cat: 'Claude Code commands', term: '! (prefix)', def: 'Run a shell command directly from the prompt.', ex: '! ls' },
 ];
+
+// Student roster (seed order = the first cohort draw). The 🎲 reshuffles these.
+export const ROSTER = [
+  'Richard D.', 'Tiff N.', 'Lizzie M', 'Stefi P',
+  'Kevyn K', 'Robin H', 'Yu T', 'Ryu N',
+  'Zoe M', 'Jineen C', 'Ian F', 'Hayley M',
+  'Joshua E', 'Gianfranco L', 'Christina K', 'Vale P',
+];
+export const COHORT_SIZE = 4;
 
 // Order pages appear in the nav.
 export const NAV_ORDER = ['overview', 'setup', 'class1', 'class2', 'class3', 'cohorts', 'reference', 'faq'];

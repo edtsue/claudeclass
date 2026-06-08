@@ -1,5 +1,5 @@
 // app.mjs — ClaudeClass hub engine (vanilla ESM, no build step).
-import { CONTENT, REFERENCE, NAV_ORDER, COURSE } from './content.mjs';
+import { CONTENT, REFERENCE, NAV_ORDER, COURSE, ROSTER, COHORT_SIZE } from './content.mjs';
 import { SUPABASE, INSTRUCTOR_EMAIL } from './config.mjs';
 
 /* ---------------- tiny helpers ---------------- */
@@ -140,7 +140,47 @@ function enhance(root, pageId) {
   // reference page: inject search + grouped list
   if (pageId === 'reference') buildReference(root);
 
+  // cohorts page: dynamic board + dice reshuffle
+  if (pageId === 'cohorts') buildCohorts(root);
+
   if (editing) makeEditable(root);
+}
+
+/* ---------------- cohorts + dice ---------------- */
+function chunk(arr, size) { const out = []; for (let i = 0; i < arr.length; i += size) out.push(arr.slice(i, i + size)); return out; }
+function shuffle(arr) { const a = [...arr]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+
+function buildCohorts(root) {
+  const sheet = $('.sheet', root);
+  const wrap = el(`
+    <div class="cohort-wrap">
+      <div id="cohort-board" class="cohorts"></div>
+      <div class="dice-wrap">
+        <button class="btn" id="dice" title="Draw new teams"><span class="die">🎲</span> Reshuffle cohorts</button>
+        <p class="hint" style="margin:.5rem 0 0">Saved in this browser. (Project it on screen to draw teams live.)</p>
+      </div>
+    </div>`);
+  sheet.appendChild(wrap);
+  const board = $('#cohort-board', wrap);
+
+  const draw = (groups) => {
+    board.innerHTML = groups.map((g, i) => `
+      <div class="cohort-card" data-c="${i + 1}">
+        <h3>Cohort ${i + 1}</h3>
+        <ul>${g.map((n) => `<li>${n}</li>`).join('')}</ul>
+      </div>`).join('');
+  };
+
+  let groups = LS.get('cohorts', null) || chunk(ROSTER, COHORT_SIZE);
+  draw(groups);
+
+  $('#dice', wrap).addEventListener('click', () => {
+    groups = chunk(shuffle(ROSTER), COHORT_SIZE);
+    LS.set('cohorts', groups);
+    draw(groups);
+    board.classList.remove('rolled'); void board.offsetWidth; board.classList.add('rolled');
+    const die = $('#dice .die', wrap); die.classList.remove('spin'); void die.offsetWidth; die.classList.add('spin');
+  });
 }
 
 /* ---------------- reference search ---------------- */
