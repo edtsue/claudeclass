@@ -1,11 +1,9 @@
 // config.mjs — client-side configuration.
-// Supabase is OPTIONAL. Leave url empty to run on seeded content + local edits
-// (great for previewing). Fill these in once your Supabase project exists; the
-// ANON key is safe to ship publicly because Row Level Security protects writes.
+// Reads come straight from Supabase using the PUBLISHABLE key (safe to ship —
+// Row Level Security allows public read only). Writes never use this key; they go
+// through /api/save, which is gated by EDIT_PASSWORD and uses the secret key
+// server-side. Leave url empty to fall back to seeded content + local edits.
 export const SUPABASE = {
-  url: '',       // e.g. 'https://xxxx.supabase.co'
-  anonKey: '',   // the public anon key
+  url: 'https://cgrspyalvjceiecdkojx.supabase.co',
+  anonKey: 'sb_publishable_4T75izfr2r3yyJwNIQXXdA_4TbKKlmM',
 };
-
-// The email allowed to edit content (must match your Supabase login).
-export const INSTRUCTOR_EMAIL = '';

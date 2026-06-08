@@ -186,7 +186,7 @@ source ~/.zshrc</code></pre>
   class1: {
     title: 'Class 1 — Concepts & Your First App',
     nav: 'Class 1',
-    unlock: '2026-07-18T11:00:00Z', // Sat Jul 18, 2026, 7:00 AM New York time
+    unlock: '2026-06-18T11:00:00Z', // Thu Jun 18, 2026, 7:00 AM New York time
     sections: [
       {
         key: 'class1.goal',
@@ -246,7 +246,7 @@ source ~/.zshrc</code></pre>
   class2: {
     title: 'Class 2 — The Tech Stack',
     nav: 'Class 2',
-    unlock: '2026-07-25T11:00:00Z', // Sat Jul 25, 2026, 7:00 AM New York time
+    unlock: '2026-06-25T11:00:00Z', // Thu Jun 25, 2026, 7:00 AM New York time
     sections: [
       {
         key: 'class2.goal',
@@ -305,7 +305,7 @@ source ~/.zshrc</code></pre>
   class3: {
     title: 'Class 3 — Build Something Real',
     nav: 'Class 3',
-    unlock: '2026-07-16T11:00:00Z', // Thu Jul 16, 2026, 7:00 AM New York time — VERIFY (earlier than Class 1?)
+    unlock: '2026-07-16T11:00:00Z', // Thu Jul 16, 2026, 7:00 AM New York time
     sections: [
       {
         key: 'class3.goal',

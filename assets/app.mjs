@@ -1,6 +1,6 @@
 // app.mjs — ClaudeClass hub engine (vanilla ESM, no build step).
 import { CONTENT, REFERENCE, NAV_ORDER, COURSE, ROSTER, COHORT_SIZE } from './content.mjs';
-import { SUPABASE, INSTRUCTOR_EMAIL } from './config.mjs';
+import { SUPABASE } from './config.mjs';
 
 /* ---------------- tiny helpers ---------------- */
 const $ = (s, r = document) => r.querySelector(s);
@@ -40,29 +40,40 @@ const SEED = {};
 for (const page of Object.values(CONTENT)) for (const s of page.sections) SEED[s.key] = s.html;
 
 let overrides = {}; // key -> edited html (from Supabase or localStorage)
-let sb = null;      // supabase client (if configured)
-let instructorSession = false;
+let sb = null;      // supabase client for READS (publishable key)
 
 const html = (key) => overrides[key] ?? SEED[key] ?? '';
 
 async function loadOverrides() {
   if (sb) {
     try {
-      const { data } = await sb.from('hub_content').select('key,html');
-      if (data) { overrides = {}; data.forEach((r) => (overrides[r.key] = r.html)); LS.set('content', overrides); return; }
-    } catch (e) { console.warn('Supabase load failed, using cache/seed', e); showNotice('Showing the last saved copy (offline).'); }
-    overrides = LS.get('content', {});
-  } else {
-    overrides = LS.get('content', {}); // local edits (preview mode)
+      const { data, error } = await sb.from('hub_content').select('key,html');
+      if (error) throw error;
+      overrides = {}; (data || []).forEach((r) => (overrides[r.key] = r.html));
+      LS.set('content', overrides); // cache for offline
+      return;
+    } catch (e) {
+      console.warn('Supabase load failed, using cached/seed content', e);
+      showNotice('Showing the last saved copy (offline).');
+    }
   }
+  overrides = LS.get('content', {}); // cache or local edits
 }
 
 async function saveOverride(key, value) {
   overrides[key] = value;
-  if (sb && instructorSession) {
-    await sb.from('hub_content').upsert({ key, html: value, updated_at: new Date().toISOString() });
-  } else {
+  // Save through the secure function (gated by EDIT_PASSWORD, writes with the secret key).
+  try {
+    const res = await fetch('/api/save', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ key, html: value }),
+    });
+    if (res.ok) { LS.set('content', overrides); return; }
+    throw new Error('save status ' + res.status);
+  } catch (e) {
+    // No backend (local) or cloud not configured → keep a local copy so nothing is lost.
     LS.set('content', overrides);
+    showNotice('Saved on this device (cloud save not available).');
   }
 }
 
@@ -451,11 +462,9 @@ function closePanels() { $$('.panel').forEach((p) => p.classList.remove('open'))
 
 /* ---------------- boot ---------------- */
 async function boot() {
-  // Supabase (optional)
+  // Supabase client for reads (publishable key, RLS public-read)
   if (SUPABASE.url && SUPABASE.anonKey && window.supabase) {
     sb = window.supabase.createClient(SUPABASE.url, SUPABASE.anonKey);
-    const { data } = await sb.auth.getSession();
-    instructorSession = !!data?.session && (!INSTRUCTOR_EMAIL || data.session.user.email === INSTRUCTOR_EMAIL);
   }
 
   $$('[data-mascot]').forEach((e) => (e.innerHTML = mascot()));
