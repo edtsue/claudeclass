@@ -178,6 +178,8 @@ function enhance(root, pageId) {
         li.classList.toggle('checked');
         state[i] = li.classList.contains('checked');
         LS.set(key, state);
+        const items = $$('li', list);
+        if (items.length && items.every((x) => x.classList.contains('checked'))) celebrate(list);
       });
     });
   });
@@ -226,6 +228,44 @@ function buildCohorts(root) {
     board.classList.remove('rolled'); void board.offsetWidth; board.classList.add('rolled');
     const die = $('#dice .die', wrap); die.classList.remove('spin'); void die.offsetWidth; die.classList.add('spin');
   });
+}
+
+/* ---------------- delight + personality ---------------- */
+function motionOn() { return document.documentElement.dataset.motion !== 'off'; }
+
+function celebrate(anchor) {
+  showNotice('🎉 Crew goal complete — nice work!');
+  if (!motionOn()) return;
+  const rect = anchor.getBoundingClientRect();
+  const emojis = ['🎉', '✨', '🦀', '⭐', '🟠'];
+  for (let i = 0; i < 14; i++) {
+    const s = document.createElement('span');
+    s.className = 'confetti';
+    s.textContent = emojis[i % emojis.length];
+    s.style.left = (rect.left + Math.random() * rect.width) + 'px';
+    s.style.top = rect.top + 'px';
+    s.style.animationDelay = (Math.random() * 0.25) + 's';
+    document.body.appendChild(s);
+    setTimeout(() => s.remove(), 1800);
+  }
+}
+
+const TIPS = [
+  "Tip: you can't break anything — that's what git is for! 🦀",
+  'Stuck on a word? The <strong>Reference</strong> explains everything in plain English.',
+  "Don't know how to ask? Just describe what you want — I'll help shape the prompt.",
+  'Best way to learn: try it, see what happens, tweak, repeat.',
+  "Don't memorize commands — copy-paste them from the cheat-sheets.",
+  "Lost? Tap me anytime — I know this whole class.",
+];
+function showMascotTip() {
+  const tip = $('#mascot-tip');
+  $('#tip-text').innerHTML = TIPS[Math.floor(Math.random() * TIPS.length)];
+  tip.classList.add('show');
+  const hide = () => tip.classList.remove('show');
+  $('#tip-x').onclick = hide;
+  clearTimeout(showMascotTip._t);
+  showMascotTip._t = setTimeout(hide, 9000);
 }
 
 /* ---------------- reference search ---------------- */
@@ -344,7 +384,7 @@ const SUGGESTIONS = [
 function buildChat() {
   $('#chat-suggest').innerHTML = SUGGESTIONS.map((s) => `<button>${s}</button>`).join('');
   $$('#chat-suggest button').forEach((b) => b.addEventListener('click', () => { $('#chat-text').value = b.textContent; sendChat(); }));
-  if (!chatHistory.length) addMsg('bot', "Hi! I'm your Claude helper 🦀 Ask me anything about the class — concepts, commands, or what to do next.");
+  if (!chatHistory.length) addMsg('bot', "Hi, I'm Clawde 🦀 — your class helper. Ask me anything: a word you don't get, what a command does, or just what to try next!");
 }
 function addMsg(role, text, cls = '') {
   const log = $('#chat-log');
@@ -355,7 +395,7 @@ async function sendChat() {
   const input = $('#chat-text'); const q = input.value.trim(); if (!q) return;
   input.value = ''; addMsg('user', q); chatHistory.push({ role: 'user', text: q });
   $('#chat-suggest').style.display = 'none';
-  const thinking = addMsg('bot', 'thinking…', 'thinking');
+  const thinking = addMsg('bot', 'Clawde is thinking…', 'thinking');
   try {
     const res = await fetch('/api/ask', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -476,12 +516,20 @@ async function boot() {
   buildChat();
   checkGate();
 
+  // Clawde says hi once per session (only if the gate is already open)
+  setTimeout(() => {
+    if ($('#gate').style.display === 'none' && !sessionStorage.getItem('cc:tip')) {
+      showMascotTip();
+      sessionStorage.setItem('cc:tip', '1');
+    }
+  }, 2600);
+
   // events
   window.addEventListener('hashchange', render);
   $('#menu-toggle').addEventListener('click', () => $('#nav').classList.toggle('open'));
   $('#btn-settings').addEventListener('click', () => openPanel('#settings-panel'));
   $('#btn-notes').addEventListener('click', () => { renderNotes(); openPanel('#notes-panel'); });
-  $('#btn-assistant').addEventListener('click', () => $('#chat-panel').classList.toggle('open'));
+  $('#btn-assistant').addEventListener('click', () => { $('#mascot-tip').classList.remove('show'); $('#chat-panel').classList.toggle('open'); });
   $('#chat-close').addEventListener('click', () => $('#chat-panel').classList.remove('open'));
   $('#new-note').addEventListener('click', newNote);
   $('#dim').addEventListener('click', closePanels);

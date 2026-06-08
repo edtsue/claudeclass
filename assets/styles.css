@@ -8,7 +8,7 @@
   --radius: 20px;
   --radius-sm: 12px;
   --fs-base: 16px;
-  --maxw: 880px;
+  --maxw: 960px;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --speed: 0.45s;
 }
@@ -179,6 +179,7 @@ main {
   margin: 1.2rem auto 6rem;
   padding: 0 clamp(0.9rem, 4vw, 1.5rem);
 }
+.page-head { animation: rise 0.5s var(--ease) both; }
 .page-head h1 {
   font-size: clamp(1.8rem, 5vw, 2.7rem);
   line-height: 1.1;
@@ -501,6 +502,46 @@ html[data-motion="off"] .glass { background: var(--glass-2); }
   .reveal > * { animation: none; opacity: 1; transform: none; }
   .fab.assistant { animation: none; }
 }
+
+/* ---------- Desktop: vertical sidebar (uses width, kills letterboxing) ---------- */
+@media (min-width: 980px) {
+  body { display: grid; grid-template-columns: 264px minmax(0, 1fr); align-items: start; }
+  .topbar {
+    position: sticky; top: 0.7rem;
+    height: calc(100vh - 1.4rem);
+    flex-direction: column; align-items: stretch; gap: 0.4rem;
+    overflow-y: auto;
+  }
+  .topbar .menu-toggle { display: none; }
+  .topbar .brand { margin-bottom: 0.4rem; font-size: 1.15rem; }
+  .nav { flex-direction: column; margin-left: 0; gap: 0.15rem; }
+  .nav a { display: block; padding: 0.55rem 0.8rem; }
+  .bar-tools { margin-top: auto; justify-content: flex-start; padding-top: 0.6rem; border-top: 1px solid var(--hairline); }
+  main { margin-top: 1.4rem; }
+}
+
+/* ---------- Clawde personality ---------- */
+.fab.assistant:hover { animation: wiggle 0.5s var(--ease); }
+@keyframes wiggle { 0%,100% { transform: rotate(0) translateY(-3px) scale(1.04); } 25% { transform: rotate(-9deg) translateY(-3px) scale(1.06); } 75% { transform: rotate(9deg) translateY(-3px) scale(1.06); } }
+
+.mascot-tip {
+  position: fixed; right: 1.1rem; bottom: 5.6rem; z-index: 59;
+  max-width: 250px; padding: 0.7rem 0.9rem; border-radius: 16px 16px 4px 16px;
+  font-size: 0.88rem; line-height: 1.45;
+  transform: translateY(8px) scale(0.96); opacity: 0; pointer-events: none;
+  transition: opacity 0.4s var(--ease), transform 0.4s var(--ease);
+}
+.mascot-tip.show { opacity: 1; transform: none; pointer-events: auto; }
+.mascot-tip strong { color: var(--accent); }
+.mascot-tip .tip-x { position: absolute; top: 2px; right: 8px; cursor: pointer; color: var(--ink-soft); font-size: 1rem; }
+
+/* cuter "thinking" */
+.msg.bot.thinking { animation: pulse 1.3s ease-in-out infinite; }
+@keyframes pulse { 0%,100% { opacity: 0.55; } 50% { opacity: 1; } }
+
+/* celebration confetti */
+.confetti { position: fixed; z-index: 200; pointer-events: none; font-size: 1.1rem; will-change: transform, opacity; animation: fall 1.3s var(--ease) forwards; }
+@keyframes fall { 0% { transform: translateY(0) rotate(0); opacity: 1; } 100% { transform: translateY(60vh) rotate(360deg); opacity: 0; } }
 
 /* ---------- Mobile nav ---------- */
 @media (max-width: 720px) {
