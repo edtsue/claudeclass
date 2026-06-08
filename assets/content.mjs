@@ -101,7 +101,8 @@ export const CONTENT = {
           <div class="platforms">
 
             <div class="platform-card" data-os="mac">
-              <div class="platform-head">🍎 Mac — use <strong>Terminal</strong></div>
+              <div class="platform-head">🍎 Mac — use <strong>Terminal</strong> (zsh)</div>
+              <p class="hint">Your Mac's Terminal uses <strong>zsh</strong> — the default shell since 2019. These steps are written for it. (The <code>| bash</code> below just runs the installer; your Terminal stays zsh.)</p>
               <ol class="steps">
                 <li>Open <em>Terminal</em>: press <kbd>Cmd</kbd>+<kbd>Space</kbd>, type "Terminal", hit Enter.</li>
                 <li>Paste this and press Enter:
