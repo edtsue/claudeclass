@@ -40,6 +40,24 @@ export const CONTENT = {
         `,
       },
       {
+        key: 'overview.links',
+        html: `
+          <h3>Key links — set these up before we start</h3>
+          <ul class="links">
+            <li><a href="https://claude.ai" target="_blank" rel="noopener">Claude account ↗</a>
+              <span class="hint">Sign up / log in. You'll use this to log into Claude Code (a paid plan — Pro or Max — is needed).</span></li>
+            <li><a href="https://code.claude.com/docs" target="_blank" rel="noopener">Claude Code — install &amp; docs ↗</a>
+              <span class="hint">The tool itself. Step-by-step install is on the <a href="#/setup">Setup</a> page.</span></li>
+            <li><a href="https://github.com/signup" target="_blank" rel="noopener">GitHub ↗</a>
+              <span class="hint">Free account — stores your projects online (Class 2).</span></li>
+            <li><a href="https://vercel.com/signup" target="_blank" rel="noopener">Vercel ↗</a>
+              <span class="hint">Free — puts your app on the internet. Sign in with your GitHub account (Class 2).</span></li>
+            <li><a href="https://nodejs.org" target="_blank" rel="noopener">Node.js ↗</a>
+              <span class="hint">A free helper some projects need — only if Setup asks for it.</span></li>
+          </ul>
+        `,
+      },
+      {
         key: 'overview.start',
         html: `
           <h3>Start here</h3>
@@ -151,6 +169,7 @@ source ~/.zshrc</code></pre>
   class1: {
     title: 'Class 1 — Concepts & Your First App',
     nav: 'Class 1',
+    unlock: '2026-07-18T11:00:00Z', // Sat Jul 18, 2026, 7:00 AM New York time
     sections: [
       {
         key: 'class1.goal',
@@ -210,6 +229,7 @@ source ~/.zshrc</code></pre>
   class2: {
     title: 'Class 2 — The Tech Stack',
     nav: 'Class 2',
+    unlock: '2026-07-25T11:00:00Z', // Sat Jul 25, 2026, 7:00 AM New York time
     sections: [
       {
         key: 'class2.goal',
@@ -268,6 +288,7 @@ source ~/.zshrc</code></pre>
   class3: {
     title: 'Class 3 — Build Something Real',
     nav: 'Class 3',
+    unlock: '2026-07-16T11:00:00Z', // Thu Jul 16, 2026, 7:00 AM New York time — VERIFY (earlier than Class 1?)
     sections: [
       {
         key: 'class3.goal',

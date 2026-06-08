@@ -152,6 +152,8 @@ body::after {
 }
 .nav a:hover { color: var(--ink); background: var(--accent-soft); }
 .nav a.active { color: #fff; background: var(--accent); }
+.nav a.locked::after { content: "🔒"; font-size: 0.75em; margin-left: 0.25rem; opacity: 0.65; }
+.nav a.locked.active::after { opacity: 0.9; }
 
 .bar-tools { display: flex; align-items: center; gap: 0.3rem; }
 .icon-btn {
@@ -223,6 +225,17 @@ kbd {
   padding: 0.8rem 1rem;
   font-size: 0.98rem;
 }
+
+/* Locked (date-gated) pages */
+.locked-card { text-align: center; padding-top: 2.4rem; padding-bottom: 2.4rem; }
+.lock-emoji { font-size: 3rem; margin-bottom: 0.4rem; }
+.locked-card h3 { font-size: 1.4rem; }
+
+/* Link lists (overview key links) */
+ul.links { list-style: none; padding-left: 0; }
+ul.links li { padding: 0.6rem 0; border-bottom: 1px solid var(--hairline); display: flex; flex-wrap: wrap; gap: 0.2rem 0.6rem; align-items: baseline; }
+ul.links li:last-child { border-bottom: none; }
+ul.links a { font-weight: 600; font-family: "Geist Mono", monospace; font-size: 0.95rem; }
 
 /* Command blocks with copy button */
 .cmd {

@@ -80,13 +80,47 @@ function renderNav() {
   }).join('');
 }
 
+// A page is locked if it has an `unlock` date in the future — unless edit mode is on.
+function isLocked(id) {
+  const p = CONTENT[id];
+  if (!p || !p.unlock || editing) return false;
+  return Date.now() < new Date(p.unlock).getTime();
+}
+function unlockLabel(iso) {
+  return new Date(iso).toLocaleString('en-US', {
+    weekday: 'long', month: 'long', day: 'numeric',
+    hour: 'numeric', minute: '2-digit',
+    timeZone: 'America/New_York', timeZoneName: 'short',
+  });
+}
+
 function render() {
   const id = currentPage();
   const page = CONTENT[id];
-  $$('#nav a').forEach((a) => a.classList.toggle('active', a.dataset.page === id));
+  $$('#nav a').forEach((a) => {
+    a.classList.toggle('active', a.dataset.page === id);
+    a.classList.toggle('locked', isLocked(a.dataset.page));
+  });
   $('#nav').classList.remove('open');
 
   const main = $('#main');
+
+  if (isLocked(id)) {
+    main.innerHTML = `
+      <header class="page-head">
+        <div class="eyebrow">${page.nav}</div>
+        <h1>${page.title}</h1>
+      </header>
+      <div class="sheet glass reveal locked-card">
+        <div class="lock-emoji">🔒</div>
+        <h3>This unlocks soon</h3>
+        <p>Opens <strong>${unlockLabel(page.unlock)}</strong>.</p>
+        <p class="hint">In the meantime, dive into what's open — <a href="#/setup">Setup</a> and <a href="#/overview">Overview</a> — or ask the Claude helper anything.</p>
+      </div>`;
+    window.scrollTo({ top: 0, behavior: 'auto' });
+    return;
+  }
+
   main.innerHTML = `
     <header class="page-head">
       <div class="eyebrow">${id === 'overview' ? 'ClaudeClass' : page.nav}</div>
@@ -97,7 +131,7 @@ function render() {
     </div>`;
 
   enhance(main, id);
-  window.scrollTo({ top: 0, behavior: 'instant' in window ? 'instant' : 'auto' });
+  window.scrollTo({ top: 0, behavior: 'auto' });
 }
 
 /* ---------------- per-render enhancements ---------------- */
@@ -349,7 +383,8 @@ function toggleEdit(on) {
   editing = on ?? !editing;
   document.body.classList.toggle('editing', editing);
   $('#edit-banner').style.display = editing ? 'flex' : 'none';
-  if (editing) makeEditable(document); else { $('#edit-toolbar').classList.remove('show'); render(); }
+  $('#edit-toolbar').classList.remove('show');
+  render(); // re-render so locked sections appear in edit mode (and re-lock on exit)
 }
 function makeEditable(root) {
   $$('[data-region]', root).forEach((r) => {
