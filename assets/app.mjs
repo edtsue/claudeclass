@@ -141,7 +141,8 @@ function render() {
       ${page.sections.map((s) => `<div class="region" data-region="${s.key}">${html(s.key)}</div>`).join('')}
     </div>`;
 
-  enhance(main, id);
+  // A failing enhancement must never brick navigation — content is already shown.
+  try { enhance(main, id); } catch (e) { console.error('enhance failed:', e); }
   window.scrollTo({ top: 0, behavior: 'auto' });
 }
 
@@ -365,13 +366,13 @@ function buildProgress(root) {
     if (!next && state !== 'done' && state !== 'locked') next = s;
     return { s, state, sub };
   });
-  if (next) rows.forEach((r) => { if (r.s.id === next.s.id) r.state = (r.state === 'done' ? r.state : 'next'); });
+  if (next) rows.forEach((r) => { if (r.s.id === next.id) r.state = (r.state === 'done' ? r.state : 'next'); });
   const block = el(`
     <div class="progress">
       <div class="progress-steps">
         ${rows.map((r) => `<a class="pstep ${r.state}" href="#/${r.s.id}"><span class="plabel">${r.s.label}</span><span class="psub">${r.sub}</span></a>`).join('')}
       </div>
-      ${next ? `<a class="btn next-cta" href="#/${next.s.id}">Continue → ${next.label}</a>` : `<p class="hint">🎉 You've finished everything that's open — nice work!</p>`}
+      ${next ? `<a class="btn next-cta" href="#/${next.id}">Continue → ${next.label}</a>` : `<p class="hint">🎉 You've finished everything that's open — nice work!</p>`}
     </div>`);
   sheet.insertBefore(block, sheet.firstChild);
 }

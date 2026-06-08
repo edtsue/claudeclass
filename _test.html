@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="system" data-text-size="medium" data-motion="on">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ClaudeClass — Learn Claude Code by doing</title>
+  <meta name="description" content="A hands-on, beginner-friendly course for learning Claude Code." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;600;700&family=Geist+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/styles.css" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 11 11' fill='%23d97757'%3E%3Crect x='3' y='0' width='5' height='1'/%3E%3Crect x='2' y='1' width='7' height='4'/%3E%3Crect x='0' y='5' width='11' height='1'/%3E%3Crect x='2' y='6' width='7' height='3'/%3E%3Crect x='2' y='9' width='1' height='2'/%3E%3Crect x='4' y='9' width='1' height='2'/%3E%3Crect x='6' y='9' width='1' height='2'/%3E%3Crect x='8' y='9' width='1' height='2'/%3E%3C/svg%3E" />
+</head>
+<body><div id="probe"></div><script>
+window.addEventListener('error', e=>{document.getElementById('probe').textContent+=' JSERR:'+(e.error&&e.error.message||e.message);});
+window.addEventListener('unhandledrejection', e=>{document.getElementById('probe').textContent+=' REJECT:'+(e.reason&&e.reason.message||e.reason);});
+</script>
+  <!-- Top bar -->
+  <header class="topbar glass">
+    <a class="brand" href="#/"><span data-mascot></span><span>claudeclass<span class="dot">_</span></span></a>
+    <button class="icon-btn menu-toggle" id="menu-toggle" aria-label="Menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+    <nav class="nav" id="nav"></nav>
+    <div class="bar-tools">
+      <button class="icon-btn" id="btn-edit" title="Edit content" aria-label="Edit">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+      </button>
+      <button class="icon-btn" id="btn-settings" title="Settings" aria-label="Settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main id="main"></main>
+
+  <!-- Floating dock -->
+  <div class="dock">
+    <button class="fab" id="btn-notes" title="My notes" aria-label="Notes">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v12l-4 4H4Z"/><path d="M16 20v-4h4"/><path d="M8 9h8M8 13h5"/></svg>
+    </button>
+    <button class="fab assistant" id="btn-assistant" title="Ask Clawde" aria-label="Ask Clawde"><span data-mascot></span></button>
+  </div>
+
+  <!-- Clawde's tip bubble -->
+  <div class="mascot-tip glass" id="mascot-tip">
+    <span class="tip-x" id="tip-x" aria-label="Dismiss">×</span>
+    <span id="tip-text"></span>
+  </div>
+
+  <div class="overlay-dim" id="dim"></div>
+
+  <!-- Settings panel -->
+  <aside class="panel glass" id="settings-panel">
+    <div class="panel-head"><h2>Settings</h2><button class="icon-btn panel-close" aria-label="Close">✕</button></div>
+    <div class="panel-body" id="settings-body"></div>
+  </aside>
+
+  <!-- Notes panel -->
+  <aside class="panel glass" id="notes-panel">
+    <div class="panel-head"><h2>My notes</h2><button class="icon-btn panel-close" aria-label="Close">✕</button></div>
+    <div class="panel-body" id="notes-body"></div>
+    <div class="panel-foot"><button class="btn" id="new-note">+ New note</button>
+      <p class="hint" style="margin:.6rem 0 0">Saved only in this browser, just for you.</p></div>
+  </aside>
+
+  <!-- Assistant chat -->
+  <aside class="panel chat-panel glass" id="chat-panel">
+    <div class="chat-head">
+      <span data-mascot style="color:var(--accent)"></span>
+      <div><h2>Clawde</h2><div class="sub">your class helper — knows it all 🦀</div></div>
+      <button class="icon-btn" id="chat-close" style="margin-left:auto" aria-label="Close">✕</button>
+    </div>
+    <div class="chat-log" id="chat-log"></div>
+    <div class="chat-suggest" id="chat-suggest"></div>
+    <div class="chat-attach-preview" id="chat-preview"></div>
+    <div class="chat-input">
+      <button class="chat-attach" id="chat-attach" title="Attach a screenshot" aria-label="Attach a screenshot">📎</button>
+      <input type="file" id="chat-file" accept="image/*" hidden />
+      <input type="text" id="chat-text" placeholder="Ask, or attach a screenshot…" autocomplete="off" />
+      <button class="chat-send" id="chat-send" aria-label="Send">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Edit toolbar + banner -->
+  <div class="edit-toolbar glass" id="edit-toolbar">
+    <button data-cmd="bold" title="Bold"><b>B</b></button>
+    <button data-cmd="italic" title="Italic"><i>I</i></button>
+    <button data-cmd="underline" title="Underline"><u>U</u></button>
+    <button data-cmd="color" data-val="#d97757" title="Accent colour" style="color:#d97757">A</button>
+    <button data-cmd="size" data-val="5" title="Bigger">A+</button>
+    <button data-cmd="size" data-val="2" title="Smaller">A-</button>
+    <button data-cmd="removeFormat" title="Clear">⌫</button>
+  </div>
+  <div class="edit-banner" id="edit-banner" style="display:none">
+    <span>✏️ Edit mode — click any text to change it. Changes save automatically.</span>
+    <button class="btn" id="edit-done">Done</button>
+  </div>
+
+  <!-- Status notice -->
+  <div class="notice glass" id="notice"></div>
+
+  <!-- Entry gate -->
+  <div class="gate" id="gate" style="display:none">
+    <div class="gate-card glass">
+      <span class="gate-mascot" data-mascot></span>
+      <div class="eyebrow">ClaudeClass</div>
+      <h1>Enter the class</h1>
+      <p>Pop in your access code to come in.</p>
+      <form id="gate-form">
+        <input type="password" id="gate-pw" placeholder="Access code" autocomplete="current-password" />
+        <label class="gate-remember"><input type="checkbox" id="gate-remember" /> Remember me for 5 days</label>
+        <button class="btn" type="submit" style="width:100%;justify-content:center">Enter</button>
+        <div class="gate-err" id="gate-err"></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Edit-mode password (in-hub, not a browser popup) -->
+  <div class="gate" id="edit-gate" style="display:none">
+    <div class="gate-card glass">
+      <span class="gate-mascot" data-mascot></span>
+      <div class="eyebrow">Instructor</div>
+      <h1>Edit mode</h1>
+      <p>Enter the edit password to make changes.</p>
+      <form id="edit-gate-form">
+        <input type="password" id="edit-pw" placeholder="Edit password" autocomplete="current-password" />
+        <div class="gate-actions">
+          <button class="btn ghost" type="button" id="edit-gate-cancel">Cancel</button>
+          <button class="btn" type="submit" style="justify-content:center">Unlock</button>
+        </div>
+        <div class="gate-err" id="edit-gate-err"></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Supabase (optional; only used if config.mjs is filled in) -->
+  <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script type="module" src="/assets/app.mjs"></script>
+</body>
+</html>
