@@ -227,6 +227,15 @@ kbd {
   font-size: 0.98rem;
 }
 
+/* Collapsible full written steps (setup) */
+.full-steps { margin-top: 1.6rem; border-top: 1px solid var(--hairline); }
+.full-steps > summary { cursor: pointer; font-weight: 600; list-style: none; padding: 0.9rem 0 0.4rem; color: var(--accent-strong); }
+.full-steps > summary::-webkit-details-marker { display: none; }
+.full-steps > summary::before { content: "▸ "; }
+.full-steps[open] > summary::before { content: "▾ "; }
+.full-steps-body .region { margin-top: 1.4rem; padding-top: 1.4rem; border-top: 1px solid var(--hairline); }
+.full-steps-body .region:first-child { margin-top: 0.6rem; border-top: none; padding-top: 0; }
+
 /* Setup wizard */
 .wizard { border: 1.5px solid var(--accent); background: linear-gradient(180deg, var(--accent-soft), transparent 90%); border-radius: var(--radius-sm); padding: 1.1rem 1.2rem; margin-bottom: 1.8rem; }
 .wiz-head { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; }

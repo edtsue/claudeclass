@@ -185,8 +185,8 @@ function enhance(root, pageId) {
   // overview: progress stepper
   if (pageId === 'overview') buildProgress(root);
 
-  // setup: interactive wizard on top
-  if (pageId === 'setup') buildWizard(root);
+  // setup: interactive wizard on top; collapse the written steps below the intro
+  if (pageId === 'setup') { buildWizard(root); if (!editing) collapseSetup(root); }
 
   // hover-to-define jargon (view mode only, so it never gets saved into content)
   if (!editing && pageId !== 'reference') glossarize($('.sheet', root));
@@ -320,7 +320,20 @@ function buildWizard(root) {
     };
   }
 
-  if (state.os) renderStep(); else renderPick();
+  // Always start by asking Mac or PC.
+  state.os = null; state.step = 0;
+  renderPick();
+}
+
+/* ---------------- collapse the written setup steps ---------------- */
+function collapseSetup(root) {
+  const sheet = $('.sheet', root); if (!sheet) return;
+  const regions = $$('.region', sheet);
+  if (regions.length < 2) return; // keep the intro (no-admin box) visible
+  const details = el(`<details class="full-steps"><summary>📖 Prefer written steps? Open the full guide</summary><div class="full-steps-body"></div></details>`);
+  const body = $('.full-steps-body', details);
+  regions.slice(1).forEach((r) => body.appendChild(r));
+  sheet.appendChild(details);
 }
 
 /* ---------------- progress stepper (overview) ---------------- */
