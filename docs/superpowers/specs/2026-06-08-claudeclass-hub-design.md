@@ -19,6 +19,10 @@ settings. The whole hub sits behind a shared access gate.
 - **Students:** complete beginners — never used a terminal, git, or written code.
   Plain English, generous copy-paste, "how to check it worked" steps.
 - **Instructor (single author):** the user. Edits content live on the site.
+- **Teaching ethos — learn by doing:** students jump in and experiment fast. Hub
+  content is action-first: minimal preamble, short steps, "try it now" prompts, and
+  agendas that get hands on the keyboard early. Reading is kept light; doing is the
+  point.
 - **Access model:** *always-live* — content lives in the cloud (Supabase) so the
   instructor's edits appear for everyone instantly. The site is also runnable locally
   by students (a class exercise), reading the same cloud content; a local cache
@@ -39,7 +43,8 @@ settings. The whole hub sits behind a shared access gate.
 ### Environment variables (set in Vercel dashboard — never in repo)
 | Var | Used by | Purpose |
 |---|---|---|
-| `GEMINI_API_KEY` | `/api/ask` | Calls Gemini (user provides) |
+| `GEMINI_KEY` | `/api/ask` | Calls Gemini (user provides; `GEMINI_API_KEY` also accepted) |
+| `GEMINI_MODEL` | `/api/ask` | Optional; defaults to `gemini-2.5-flash` |
 | `HUB_PASSWORD` | `/api/gate` | Shared access code to enter the hub (user provides) |
 | `SESSION_SECRET` | `/api/gate` | Signs the entry session cookie |
 
@@ -53,6 +58,8 @@ settings. The whole hub sits behind a shared access gate.
    hub. Keeps casual passers-by out. A **"Remember me for 5 days"** checkbox sets the
    cookie's lifetime to 5 days (persists across browser restarts); unchecked = a
    session cookie that expires when the browser closes.
+   - *Preview/dev:* if `HUB_PASSWORD` is unset, the gate opens automatically so the
+     hub can be previewed before any env vars are configured.
    - *Security note (default = soft gate):* because content is read with the Supabase
      anon key, a determined person who finds the API could read content directly even
      without the code. For a class hub this is acceptable. If stronger privacy is
@@ -71,7 +78,13 @@ Shared header/nav + shared CSS/JS across a small set of pages:
 | Setup (Office Hours) | `/setup` | Mac + PC tabs: prerequisites, step-by-step Claude Code install, "check it worked", common errors/fixes |
 | Overview | `/` | Course intro, "what you'll learn", three class cards |
 | Class 1 / 2 / 3 | `/class1…3` | Timed agenda, plain-English concepts, command cheat-sheet (copy buttons), homework, links |
-| Glossary | `/glossary` | Plain-English terms with live search |
+| Cohorts | `#/cohorts` | Students split into 4 random teams of 4 ("pit crews"). |
+| Reference | `#/reference` | One searchable page, grouped by category: **Terminal/Git terms** (bash, curl, cron, hook, pull, push, merge, squash, json…), **Building blocks**, **Vibecoding terms**, and **Claude Code commands** (`/config`, statusline, `/model`, `/usage`, `/context`, `/clear`…). One search box filters everything. Plain-English, novice-first, each with a metaphor. |
+| FAQs | `#/faq` | Anticipated beginner questions (terminal vs web Claude Code, Claude Code vs Codex, "is vibe coding real coding", cost, privacy…). |
+
+*Implementation note:* built as a single-page app with hash routing (`#/setup`,
+`#/class1`, …) so all global panels (gate, assistant, notes, settings) live in one
+shell. **Metaphors are woven throughout** per the teaching ethos.
 
 Consistent nav everywhere; mobile-friendly.
 
