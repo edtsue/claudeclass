@@ -12,26 +12,18 @@ const LS = {
   del: (k) => localStorage.removeItem('cc:' + k),
 };
 
-/* ---------------- pixel mascot ---------------- */
-const MASCOT_MAP = [
-  '...#####...',
-  '..#######..',
-  '..#######..',
-  '..#.###.#..',
-  '..#.###.#..',
-  '###########',
-  '..#######..',
-  '..#######..',
-  '..#######..',
-  '..#.#.#.#..',
-  '..#.#.#.#..',
-];
+/* ---------------- Claude-style sunburst mark ---------------- */
 function mascot(cls = '') {
-  let rects = '';
-  MASCOT_MAP.forEach((row, y) => [...row].forEach((c, x) => {
-    if (c === '#') rects += `<rect x="${x}" y="${y}" width="1" height="1"/>`;
-  }));
-  return `<svg class="${cls}" viewBox="0 0 11 11" fill="currentColor" shape-rendering="crispEdges" aria-hidden="true">${rects}</svg>`;
+  // A clean radial "sunburst" in the Claude orange — reads as Claude branding.
+  const rays = 12, cx = 12, cy = 12, r0 = 2.6, r1 = 10.4;
+  let lines = '';
+  for (let i = 0; i < rays; i++) {
+    const a = (Math.PI * 2 * i) / rays;
+    const x0 = (cx + Math.cos(a) * r0).toFixed(2), y0 = (cy + Math.sin(a) * r0).toFixed(2);
+    const x1 = (cx + Math.cos(a) * r1).toFixed(2), y1 = (cy + Math.sin(a) * r1).toFixed(2);
+    lines += `<line x1="${x0}" y1="${y0}" x2="${x1}" y2="${y1}"/>`;
+  }
+  return `<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true">${lines}</svg>`;
 }
 
 /* ---------------- content model ---------------- */
