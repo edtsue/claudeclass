@@ -416,7 +416,8 @@ Production: https://my-app.vercel.app</pre></div>
         key: 'showcase.intro',
         html: `
           <p class="lead">Shipped something? Add it here so the whole class can see what you built. 🎉</p>
-          <p class="hint">Paste your live project link — your <strong>GitHub Pages</strong> or <strong>Vercel</strong> URL — and your name. It shows up for everyone instantly.</p>
+          <p class="hint">Paste your <strong>live</strong> project link — your <strong>Vercel</strong> (<code>…vercel.app</code>) or <strong>GitHub Pages</strong> (<code>…github.io</code>) URL — and your name. It shows up for everyone instantly.</p>
+          <p class="metaphor">⚠️ Use your <strong>live</strong> link, not a <code>localhost</code> address. A <code>localhost</code> link only works on <em>your</em> computer — nobody else can open it.</p>
         `,
       },
     ],
