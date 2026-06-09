@@ -34,7 +34,9 @@ export default async function handler(req, res) {
   url = String(url).trim().slice(0, 300);
   if (!name) return res.status(400).json({ error: 'add your name' });
   if (!/^https?:\/\/.+\..+/.test(url)) return res.status(400).json({ error: 'add a valid link starting with https://' });
-  if (/^https?:\/\/(localhost|127\.|0\.0\.0\.0|\[?::1\]?|[^/]*\.local)([:/]|$)/i.test(url)) {
+  let host = '';
+  try { host = new URL(url).hostname.toLowerCase(); } catch { return res.status(400).json({ error: 'that link doesn\'t look valid' }); }
+  if (host === 'localhost' || host === '0.0.0.0' || host === '::1' || host.startsWith('127.') || host.endsWith('.local')) {
     return res.status(400).json({ error: 'That looks like a localhost link — it only works on your computer. Paste your live Vercel or GitHub Pages URL.' });
   }
 
