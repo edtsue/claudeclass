@@ -966,6 +966,11 @@ function showNotice(text) {
 
 document.addEventListener('DOMContentLoaded', boot);
 
+// PWA: register the service worker (offline + installable)
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js').catch(() => {}));
+}
+
 // expose mascot for index.html inline use
 window.__mascot = mascot;
 export { mascot };
