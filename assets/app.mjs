@@ -460,6 +460,15 @@ function buildCohorts(root) {
         <button class="btn" id="dice" title="Draw new teams"><span class="die">🎲</span> Reshuffle cohorts</button>
         <p class="hint" style="margin:.5rem 0 0">Saved in this browser. (Project it on screen to draw teams live.)</p>
       </div>
+      <div class="waitlist-wrap">
+        <h3>Waitlist</h3>
+        <div id="waitlist" class="waitlist"><p class="hint">Loading…</p></div>
+        <form id="wl-form" class="wl-form" hidden>
+          <input id="wl-name" placeholder="Add a name to the waitlist" maxlength="60" autocomplete="off" />
+          <button class="btn" type="submit">Add to waitlist</button>
+        </form>
+        <div class="wl-msg" id="wl-msg"></div>
+      </div>
     </div>`);
   sheet.appendChild(wrap);
   const board = $('#cohort-board', wrap);
@@ -487,6 +496,34 @@ function buildCohorts(root) {
     draw(groups);
     board.classList.remove('rolled'); void board.offsetWidth; board.classList.add('rolled');
     const die = $('#dice .die', wrap); die.classList.remove('spin'); void die.offsetWidth; die.classList.add('spin');
+  });
+
+  // Waitlist — public read; add/remove only in edit mode (saved to Supabase)
+  const wlList = $('#waitlist', wrap);
+  if (editing) $('#wl-form', wrap).hidden = false;
+  const loadWL = async () => {
+    if (!sb) { wlList.innerHTML = `<p class="hint">Connect the database to use the waitlist.</p>`; return; }
+    try {
+      const { data, error } = await sb.from('waitlist').select('id,name').order('created_at', { ascending: true });
+      if (error) throw error;
+      if (!data || !data.length) { wlList.innerHTML = `<p class="hint">No one on the waitlist yet.</p>`; return; }
+      wlList.innerHTML = data.map((w) => `<span class="wl-item">${escapeHtml(w.name)}${editing ? `<button class="wl-x" data-id="${w.id}" title="Remove" type="button">✕</button>` : ''}</span>`).join('');
+      if (editing) $$('.wl-x', wlList).forEach((b) => b.addEventListener('click', async () => {
+        await fetch('/api/waitlist', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'remove', id: b.dataset.id }) });
+        loadWL();
+      }));
+    } catch { wlList.innerHTML = `<p class="hint">Couldn't load the waitlist.</p>`; }
+  };
+  loadWL();
+  $('#wl-form', wrap).addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const name = $('#wl-name', wrap).value.trim(); if (!name) return;
+    const msg = $('#wl-msg', wrap); msg.textContent = 'Adding…';
+    try {
+      const res = await fetch('/api/waitlist', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'add', name }) });
+      if (res.ok) { $('#wl-name', wrap).value = ''; msg.textContent = ''; loadWL(); }
+      else { const d = await res.json().catch(() => ({})); msg.textContent = d.error || 'Could not add — are you in edit mode?'; }
+    } catch { msg.textContent = "Couldn't connect — try again."; }
   });
 }
 
