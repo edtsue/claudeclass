@@ -753,6 +753,20 @@ function showToolbar(e) {
   tb.style.left = rect.left + 'px';
 }
 function exec(cmd, val = null) { document.execCommand(cmd, false, val); }
+// Add a new checklist item: append an <li> to the nearest homework list (or start one).
+function addChecklistItem() {
+  const sel = window.getSelection(); if (!sel.rangeCount) { exec('insertHTML', '<ul class="todo"><li>New task</li></ul>'); return; }
+  let node = sel.anchorNode;
+  let ul = node && (node.nodeType === 1 ? node : node.parentElement);
+  while (ul && !(ul.tagName === 'UL' && ul.classList.contains('todo'))) ul = ul.parentElement;
+  if (ul) {
+    const li = document.createElement('li'); li.textContent = 'New task';
+    ul.appendChild(li);
+    const r = document.createRange(); r.selectNodeContents(li); sel.removeAllRanges(); sel.addRange(r);
+  } else {
+    exec('insertHTML', '<ul class="todo"><li>New task</li></ul>');
+  }
+}
 
 /* ---------------- gate ---------------- */
 async function checkGate() {
@@ -934,9 +948,12 @@ async function boot() {
   $('#edit-done').addEventListener('click', () => toggleEdit(false));
   $$('#edit-toolbar [data-cmd]').forEach((b) => b.addEventListener('mousedown', (e) => {
     e.preventDefault();
-    if (b.dataset.cmd === 'color') exec('foreColor', b.dataset.val);
-    else if (b.dataset.cmd === 'size') exec('fontSize', b.dataset.val);
-    else exec(b.dataset.cmd);
+    const c = b.dataset.cmd;
+    if (c === 'color') exec('foreColor', b.dataset.val);
+    else if (c === 'size') exec('fontSize', b.dataset.val);
+    else if (c === 'addtask') addChecklistItem();
+    else if (c === 'createLink') { const url = prompt('Link address (https://…):'); if (url) exec('createLink', url); }
+    else exec(c);
   }));
 }
 

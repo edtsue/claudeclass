@@ -600,7 +600,8 @@ ul.todo li.checked { color: var(--ink-soft); text-decoration: line-through; text
 body.editing [data-region] { outline: 2px dashed var(--accent); outline-offset: 6px; border-radius: 8px; transition: outline 0.2s; }
 body.editing [data-region]:focus { outline-style: solid; background: var(--accent-soft); }
 .edit-toolbar { position: fixed; z-index: 90; display: none; gap: 0.2rem; padding: 0.3rem; border-radius: 12px; }
-.edit-toolbar.show { display: flex; }
+.edit-toolbar.show { display: flex; flex-wrap: wrap; max-width: 94vw; }
+.tb-sep { width: 1px; align-self: stretch; background: var(--hairline); margin: 0 0.2rem; }
 .edit-toolbar button { width: 32px; height: 30px; border: none; background: transparent; color: var(--ink); cursor: pointer; border-radius: 7px; font-size: 0.9rem; }
 .edit-toolbar button:hover { background: var(--accent-soft); }
 .edit-banner { position: fixed; bottom: 0; left: 0; right: 0; z-index: 85; padding: 0.7rem 1rem; display: flex; gap: 0.8rem; align-items: center; justify-content: center; background: var(--accent); color: #fff; font-size: 0.9rem; }
