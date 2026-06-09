@@ -258,7 +258,7 @@ function buildWizard(root) {
   function renderPick() {
     wrap.innerHTML = `
       <div class="wiz-head"><span class="wiz-badge">Setup Wizard</span></div>
-      <h3>Let's get you installed 🦀</h3>
+      <h3>Let's get you installed</h3>
       <p class="hint">I'll walk you through it one step at a time — and if you get stuck, show me a screenshot.</p>
       <p><strong>First — which computer are you on?</strong></p>
       <div class="wiz-os">
@@ -459,7 +459,7 @@ function motionOn() { return document.documentElement.dataset.motion !== 'off'; 
 function celebrate(anchor, message) {
   showNotice(message || '🎉 Crew goal complete — nice work!');
   if (!motionOn()) return;
-  const emojis = ['🎉', '✨', '🦀', '⭐', '🟠', '🎊', '💥', '🟧'];
+  const emojis = ['🎉', '✨', '🧡', '⭐', '🟠', '🎊', '💥', '🟧'];
   const N = 70;
   for (let i = 0; i < N; i++) {
     const s = document.createElement('span');
@@ -475,7 +475,7 @@ function celebrate(anchor, message) {
 }
 
 const TIPS = [
-  "Tip: you can't break anything — that's what git is for! 🦀",
+  "Tip: you can't break anything — that's what git is for!",
   'Stuck on a word? The <strong>Reference</strong> explains everything in plain English.',
   "Don't know how to ask? Just describe what you want — I'll help shape the prompt.",
   'Best way to learn: try it, see what happens, tweak, repeat.',
@@ -608,7 +608,7 @@ const SUGGESTIONS = [
 function buildChat() {
   $('#chat-suggest').innerHTML = SUGGESTIONS.map((s) => `<button>${s}</button>`).join('');
   $$('#chat-suggest button').forEach((b) => b.addEventListener('click', () => { $('#chat-text').value = b.textContent; sendChat(); }));
-  if (!chatHistory.length) addMsg('bot', "Hi, I'm Clawde 🦀 — your class helper. Ask me anything: a word you don't get, what a command does, or just what to try next!");
+  if (!chatHistory.length) addMsg('bot', "Hi, I'm Clawde — your class helper. Ask me anything: a word you don't get, what a command does, or just what to try next!");
 }
 function addMsg(role, text, cls = '') {
   const log = $('#chat-log');

@@ -178,7 +178,7 @@ source ~/.zshrc</code></pre>
             <li><strong>Login page didn't open</strong> — type <code>claude</code> again; it will retry the browser login.</li>
           </ul>
           <p class="hint">Bring any leftover errors to office hours — we'll fix them together.</p>
-          <p class="metaphor">📷 <strong>Stuck on an error?</strong> Tap <strong>Clawde</strong> 🦀 (bottom-right), hit the 📎, and upload a screenshot of your screen — he'll read the error and tell you exactly what to do.</p>
+          <p class="metaphor">📷 <strong>Stuck on an error?</strong> Tap <strong>Clawde</strong> (bottom-right), hit the 📎, and upload a screenshot of your screen — he'll read the error and tell you exactly what to do.</p>
         `,
       },
     ],
@@ -487,7 +487,7 @@ Production: https://my-app.vercel.app</pre></div>
     sections: [
       {
         key: 'help.intro',
-        html: `<p class="lead">Everyone gets stuck — it's part of building, not a sign you're doing it wrong. 🦀 Here's how to get unstuck fast.</p>`,
+        html: `<p class="lead">Everyone gets stuck — it's part of building, not a sign you're doing it wrong. Here's how to get unstuck fast.</p>`,
       },
       {
         key: 'help.first',
@@ -496,7 +496,7 @@ Production: https://my-app.vercel.app</pre></div>
           <ol class="path">
             <li><strong>Tell Claude what's wrong, in plain English.</strong> "That button doesn't do anything — fix it." It will try again.</li>
             <li><strong>Ask Claude to explain.</strong> "What did that do, and why didn't it work?" Understanding the problem usually solves it.</li>
-            <li><strong>Ask Clawde 🦀</strong> (the helper in the corner) about any word or step on this hub.</li>
+            <li><strong>Ask Clawde</strong> (the helper in the corner) about any word or step on this hub.</li>
           </ol>
         `,
       },
