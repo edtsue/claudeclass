@@ -409,14 +409,21 @@ function glossarize(rootEl) {
 }
 
 /* ---------------- cohorts + dice ---------------- */
-function chunk(arr, size) { const out = []; for (let i = 0; i < arr.length; i += size) out.push(arr.slice(i, i + size)); return out; }
 function shuffle(arr) { const a = [...arr]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+// Number of teams: aim for ~COHORT_SIZE per team, but keep teams balanced.
+const NUM_COHORTS = Math.max(1, Math.floor(ROSTER.length / COHORT_SIZE)); // 18 → 4 teams (5,5,4,4)
+function splitInto(arr, n) {
+  const out = Array.from({ length: n }, () => []);
+  arr.forEach((x, i) => out[i % n].push(x)); // round-robin → sizes differ by at most 1
+  return out;
+}
 
 function buildCohorts(root) {
   const sheet = $('.sheet', root);
   const wrap = el(`
     <div class="cohort-wrap">
       <div id="cohort-board" class="cohorts"></div>
+      <p class="hint" style="margin:.8rem 0 0">👑 = your cohort captain (the top name on each team).</p>
       <div class="dice-wrap">
         <button class="btn" id="dice" title="Draw new teams"><span class="die">🎲</span> Reshuffle cohorts</button>
         <p class="hint" style="margin:.5rem 0 0">Saved in this browser. (Project it on screen to draw teams live.)</p>
@@ -429,15 +436,21 @@ function buildCohorts(root) {
     board.innerHTML = groups.map((g, i) => `
       <div class="cohort-card" data-c="${i + 1}">
         <h3>Cohort ${i + 1}</h3>
-        <ul>${g.map((n) => `<li>${n}</li>`).join('')}</ul>
+        <ul>${g.map((n, idx) => idx === 0
+          ? `<li class="captain" title="Cohort captain">👑 ${n}</li>`
+          : `<li>${n}</li>`).join('')}</ul>
       </div>`).join('');
   };
 
-  let groups = LS.get('cohorts', null) || chunk(ROSTER, COHORT_SIZE);
+  let groups = LS.get('cohorts', null);
+  // Regenerate if there's no saved draw, or the roster/team count changed (e.g. old 5-team cache).
+  if (!groups || groups.length !== NUM_COHORTS || groups.flat().length !== ROSTER.length) {
+    groups = splitInto(ROSTER, NUM_COHORTS);
+  }
   draw(groups);
 
   $('#dice', wrap).addEventListener('click', () => {
-    groups = chunk(shuffle(ROSTER), COHORT_SIZE);
+    groups = splitInto(shuffle(ROSTER), NUM_COHORTS);
     LS.set('cohorts', groups);
     draw(groups);
     board.classList.remove('rolled'); void board.offsetWidth; board.classList.add('rolled');

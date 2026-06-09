@@ -402,6 +402,7 @@ ul.todo li.checked { color: var(--ink-soft); text-decoration: line-through; text
 .cohort-card ul { list-style: none; padding-left: 0; margin: 0; }
 .cohort-card li { padding: 0.2rem 0; border-bottom: 1px solid var(--hairline); }
 .cohort-card li:last-child { border-bottom: none; }
+.cohort-card li.captain { font-weight: 600; color: var(--accent-strong); }
 .dice-wrap { margin-top: 1.4rem; text-align: center; }
 .dice-wrap .die { display: inline-block; }
 .dice-wrap .die.spin { animation: roll 0.6s var(--ease); }
@@ -512,6 +513,10 @@ ul.todo li.checked { color: var(--ink-soft); text-decoration: line-through; text
 }
 .btn:hover { transform: translateY(-2px); background: var(--accent-strong); }
 .btn.ghost { background: var(--glass-2); color: var(--ink); border: 1px solid var(--hairline); }
+/* When a .btn is a link inside .sheet, beat the `.sheet a` colour/underline. */
+.sheet a.btn { color: #fff; border-bottom: none; }
+.sheet a.btn:hover { color: #fff; border-bottom: none; }
+.sheet a.btn.ghost { color: var(--ink); }
 
 /* ---------- Assistant chat ---------- */
 .chat-panel { width: min(400px, 94vw); height: min(620px, 88vh); top: auto; bottom: 1.1rem; right: 1.1rem; border-radius: var(--radius); transform: translateY(120%) scale(0.98); }
