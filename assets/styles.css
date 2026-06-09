@@ -211,6 +211,8 @@ main {
 .sheet h3 { font-size: 1.2rem; letter-spacing: -0.01em; margin: 0 0 0.6rem; }
 .sheet h3 .dur, .sheet h3 .dur { float: right; font-family: "Geist Mono", monospace; font-size: 0.75rem; color: var(--accent); background: var(--accent-soft); padding: 0.15rem 0.55rem; border-radius: 999px; font-weight: 500; }
 .sheet p { margin: 0.6rem 0; }
+.ask-btn { float: right; margin: 0 0 0.3rem 0.5rem; font-family: "Geist Mono", monospace; font-size: 0.64rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-soft); background: transparent; border: 1px solid var(--hairline); border-radius: 999px; padding: 0.18rem 0.55rem; cursor: pointer; transition: all 0.2s; font-weight: 500; }
+.ask-btn:hover { color: #fff; background: var(--accent); border-color: var(--accent); }
 .sheet a { color: var(--accent-strong); text-decoration: none; border-bottom: 1px solid var(--accent-soft); }
 .sheet a:hover { border-bottom-color: var(--accent); }
 .lead { font-size: 1.12rem; color: var(--ink); }
@@ -554,6 +556,20 @@ ul.todo li.checked { color: var(--ink-soft); text-decoration: line-through; text
 .chat-suggest { display: flex; flex-wrap: wrap; gap: 0.35rem; padding: 0 1rem 0.6rem; }
 .chat-suggest button { font-size: 0.78rem; padding: 0.3rem 0.6rem; border-radius: 999px; border: 1px solid var(--hairline); background: var(--glass-2); color: var(--ink-soft); cursor: pointer; }
 .chat-suggest button:hover { color: var(--accent-strong); border-color: var(--accent); }
+
+/* ---------- Global search ---------- */
+.search-modal { position: fixed; inset: 0; z-index: 96; display: flex; justify-content: center; align-items: flex-start; padding: 12vh 1rem 1rem; background: rgba(20,14,10,0.4); }
+.search-box { width: min(620px, 100%); border-radius: var(--radius); overflow: hidden; max-height: 72vh; display: flex; flex-direction: column; }
+.search-input-row { display: flex; align-items: center; gap: 0.6rem; padding: 0.8rem 1rem; border-bottom: 1px solid var(--hairline); }
+.search-input-row svg { width: 18px; height: 18px; color: var(--ink-soft); flex-shrink: 0; }
+.search-input-row input { flex: 1; border: none; background: transparent; color: var(--ink); font-size: 1.05rem; font-family: inherit; }
+.search-input-row input:focus { outline: none; }
+.search-results { overflow-y: auto; }
+.search-hit { display: block; padding: 0.7rem 1.1rem; border-bottom: 1px solid var(--hairline); text-decoration: none; color: var(--ink); }
+.search-hit:hover { background: var(--accent-soft); }
+.sh-title { font-weight: 600; }
+.sh-nav { font-family: "Geist Mono", monospace; font-size: 0.7rem; color: var(--accent); text-transform: uppercase; letter-spacing: 0.08em; margin-left: 0.4rem; }
+.sh-snip { display: block; color: var(--ink-soft); font-size: 0.85rem; margin-top: 0.15rem; }
 
 /* ---------- Gate ---------- */
 .gate { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; padding: 1.2rem; }

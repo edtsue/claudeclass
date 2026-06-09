@@ -12,18 +12,26 @@ const LS = {
   del: (k) => localStorage.removeItem('cc:' + k),
 };
 
-/* ---------------- Claude-style sunburst mark ---------------- */
+/* ---------------- pixel Claude mascot ---------------- */
+const MASCOT_MAP = [
+  '..##########..',
+  '..##########..',
+  '..##.####.##..',
+  '..##.####.##..',
+  '..##########..',
+  '##############',
+  '..##########..',
+  '..##########..',
+  '..##########..',
+  '...#.#..#.#...',
+  '...#.#..#.#...',
+];
 function mascot(cls = '') {
-  // A clean radial "sunburst" in the Claude orange — reads as Claude branding.
-  const rays = 12, cx = 12, cy = 12, r0 = 2.6, r1 = 10.4;
-  let lines = '';
-  for (let i = 0; i < rays; i++) {
-    const a = (Math.PI * 2 * i) / rays;
-    const x0 = (cx + Math.cos(a) * r0).toFixed(2), y0 = (cy + Math.sin(a) * r0).toFixed(2);
-    const x1 = (cx + Math.cos(a) * r1).toFixed(2), y1 = (cy + Math.sin(a) * r1).toFixed(2);
-    lines += `<line x1="${x0}" y1="${y0}" x2="${x1}" y2="${y1}"/>`;
-  }
-  return `<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true">${lines}</svg>`;
+  let rects = '';
+  MASCOT_MAP.forEach((row, y) => [...row].forEach((c, x) => {
+    if (c === '#') rects += `<rect x="${x}" y="${y}" width="1" height="1"/>`;
+  }));
+  return `<svg class="${cls}" viewBox="0 0 14 11" fill="currentColor" shape-rendering="crispEdges" aria-hidden="true">${rects}</svg>`;
 }
 
 /* ---------------- content model ---------------- */
@@ -184,7 +192,28 @@ function enhance(root, pageId) {
   // hover-to-define jargon (view mode only, so it never gets saved into content)
   if (!editing && pageId !== 'reference') glossarize($('.sheet', root));
 
+  // "Ask Claude about this" button on each content heading (view mode only)
+  if (!editing) addAskButtons(root);
+
   if (editing) makeEditable(root);
+}
+
+/* ---------------- "Ask Claude about this" ---------------- */
+function openChatWith(question) {
+  $('#mascot-tip')?.classList.remove('show');
+  $('#chat-panel').classList.add('open');
+  const input = $('#chat-text');
+  input.value = question;
+  sendChat();
+}
+function addAskButtons(root) {
+  $$('.region h3', root).forEach((h) => {
+    if (h.querySelector('.ask-btn')) return;
+    const topic = h.textContent.replace(/\s+/g, ' ').trim();
+    const b = el(`<button class="ask-btn" type="button" title="Ask Claude about this">ask Claude</button>`);
+    b.addEventListener('click', () => openChatWith(`In simple, beginner-friendly terms, explain: "${topic}"`));
+    h.appendChild(b);
+  });
 }
 
 /* ---------------- shared copy button ---------------- */
@@ -759,6 +788,36 @@ function showGate() {
 function openPanel(sel) { $(sel).classList.add('open'); $('#dim').classList.add('show'); }
 function closePanels() { $$('.panel').forEach((p) => p.classList.remove('open')); $('#dim').classList.remove('show'); }
 
+/* ---------------- global search ---------------- */
+function stripText(s) { return s.replace(/<[^>]+>/g, ' ').replace(/&[a-z]+;/g, ' ').replace(/\s+/g, ' ').trim(); }
+const SEARCH_INDEX = (() => {
+  const idx = [];
+  for (const id of Object.keys(CONTENT)) {
+    const p = CONTENT[id];
+    const raw = p.sections.map((s) => stripText(s.html)).join(' ');
+    idx.push({ id, title: p.title, nav: p.nav, raw, text: (p.title + ' ' + p.nav + ' ' + raw).toLowerCase() });
+  }
+  for (const r of REFERENCE) {
+    idx.push({ id: 'reference', title: r.term, nav: 'Reference', raw: r.def, text: (r.term + ' ' + r.def + ' ' + (r.meta || '')).toLowerCase() });
+  }
+  return idx;
+})();
+function searchRender(q) {
+  const term = q.toLowerCase().trim();
+  const out = $('#search-results');
+  if (!term) { out.innerHTML = `<p class="hint" style="padding:1rem">Type to search pages, concepts, and commands.</p>`; return; }
+  const hits = SEARCH_INDEX.filter((e) => e.text.includes(term)).slice(0, 25);
+  if (!hits.length) { out.innerHTML = `<p class="hint" style="padding:1rem">No matches for "${escapeHtml(q)}". Try a simpler word — or ask Claude.</p>`; return; }
+  out.innerHTML = hits.map((h) => {
+    const i = h.raw.toLowerCase().indexOf(term);
+    let snip = h.raw.slice(0, 90);
+    if (i > -1) { const s = Math.max(0, i - 30); snip = (s > 0 ? '…' : '') + h.raw.slice(s, i + term.length + 55); }
+    return `<a class="search-hit" href="#/${h.id}"><span class="sh-title">${escapeHtml(h.title)}</span> <span class="sh-nav">${h.nav}</span><span class="sh-snip">${escapeHtml(snip)}…</span></a>`;
+  }).join('');
+}
+function openSearch() { const m = $('#search-modal'); m.style.display = 'flex'; const i = $('#search-input'); searchRender(i.value); setTimeout(() => i.focus(), 40); }
+function closeSearch() { $('#search-modal').style.display = 'none'; }
+
 /* ---------------- boot ---------------- */
 async function boot() {
   // Supabase client for reads (publishable key, RLS public-read)
@@ -787,6 +846,15 @@ async function boot() {
   window.addEventListener('hashchange', render);
   $('#menu-toggle').addEventListener('click', () => $('#nav').classList.toggle('open'));
   $('#btn-settings').addEventListener('click', () => openPanel('#settings-panel'));
+  $('#btn-search').addEventListener('click', openSearch);
+  $('#search-close').addEventListener('click', closeSearch);
+  $('#search-input').addEventListener('input', (e) => searchRender(e.target.value));
+  $('#search-modal').addEventListener('click', (e) => { if (e.target.id === 'search-modal') closeSearch(); });
+  $('#search-results').addEventListener('click', (e) => { if (e.target.closest('.search-hit')) closeSearch(); });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeSearch();
+    else if (e.key === '/' && !/^(INPUT|TEXTAREA)$/.test(document.activeElement.tagName) && !document.activeElement.isContentEditable) { e.preventDefault(); openSearch(); }
+  });
   $('#btn-notes').addEventListener('click', () => { renderNotes(); openPanel('#notes-panel'); });
   $('#btn-assistant').addEventListener('click', () => { $('#mascot-tip').classList.remove('show'); $('#chat-panel').classList.toggle('open'); });
   $('#chat-close').addEventListener('click', () => $('#chat-panel').classList.remove('open'));
