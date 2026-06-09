@@ -557,6 +557,18 @@ ul.todo li.checked { color: var(--ink-soft); text-decoration: line-through; text
 .chat-suggest button { font-size: 0.78rem; padding: 0.3rem 0.6rem; border-radius: 999px; border: 1px solid var(--hairline); background: var(--glass-2); color: var(--ink-soft); cursor: pointer; }
 .chat-suggest button:hover { color: var(--accent-strong); border-color: var(--accent); }
 
+/* ---------- Showcase ---------- */
+.showcase-form { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.2rem; }
+.showcase-form input { flex: 1 1 160px; padding: 0.6rem 0.8rem; border-radius: 10px; border: 1px solid var(--hairline); background: var(--glass-2); color: var(--ink); font-family: inherit; }
+.showcase-form input:focus { outline: 2px solid var(--accent); }
+.sc-msg:not(:empty) { margin-top: 0.5rem; color: var(--accent-strong); font-size: 0.9rem; }
+.showcase-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 0.8rem; margin-top: 1.4rem; }
+.sc-card { display: flex; flex-direction: column; gap: 0.2rem; padding: 0.9rem 1rem; border-radius: var(--radius-sm); border: 1px solid var(--hairline); border-top: 3px solid var(--accent); background: var(--glass-2); text-decoration: none; color: var(--ink); transition: transform 0.2s var(--ease); }
+.sc-card:hover { transform: translateY(-3px); }
+.sc-title { font-weight: 600; }
+.sc-by { font-size: 0.82rem; color: var(--ink-soft); }
+.sc-link { font-family: "Geist Mono", monospace; font-size: 0.76rem; color: var(--accent-strong); margin-top: 0.3rem; word-break: break-all; }
+
 /* ---------- Global search ---------- */
 .search-modal { position: fixed; inset: 0; z-index: 96; display: flex; justify-content: center; align-items: flex-start; padding: 12vh 1rem 1rem; background: rgba(20,14,10,0.4); }
 .search-box { width: min(620px, 100%); border-radius: var(--radius); overflow: hidden; max-height: 72vh; display: flex; flex-direction: column; }

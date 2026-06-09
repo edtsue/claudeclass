@@ -408,6 +408,20 @@ Production: https://my-app.vercel.app</pre></div>
     ],
   },
 
+  showcase: {
+    title: 'Showcase',
+    nav: 'Showcase',
+    sections: [
+      {
+        key: 'showcase.intro',
+        html: `
+          <p class="lead">Shipped something? Add it here so the whole class can see what you built. 🎉</p>
+          <p class="hint">Paste your live project link — your <strong>GitHub Pages</strong> or <strong>Vercel</strong> URL — and your name. It shows up for everyone instantly.</p>
+        `,
+      },
+    ],
+  },
+
   reference: {
     title: 'Reference',
     nav: 'Reference',
@@ -606,4 +620,4 @@ export const ROSTER = [
 export const COHORT_SIZE = 4;
 
 // Order pages appear in the nav.
-export const NAV_ORDER = ['overview', 'setup', 'class1', 'class2', 'class3', 'cohorts', 'reference', 'faq'];
+export const NAV_ORDER = ['overview', 'setup', 'class1', 'class2', 'class3', 'cohorts', 'showcase', 'reference', 'faq'];

@@ -183,6 +183,9 @@ function enhance(root, pageId) {
   // cohorts page: dynamic board + dice reshuffle
   if (pageId === 'cohorts') buildCohorts(root);
 
+  // showcase page: submit + gallery of class projects
+  if (pageId === 'showcase') buildShowcase(root);
+
   // overview: progress stepper
   if (pageId === 'overview') buildProgress(root);
 
@@ -787,6 +790,61 @@ function showGate() {
 /* ---------------- panels ---------------- */
 function openPanel(sel) { $(sel).classList.add('open'); $('#dim').classList.add('show'); }
 function closePanels() { $$('.panel').forEach((p) => p.classList.remove('open')); $('#dim').classList.remove('show'); }
+
+/* ---------------- showcase (class project gallery) ---------------- */
+async function buildShowcase(root) {
+  const sheet = $('.sheet', root); if (!sheet) return;
+  const wrap = el(`
+    <div class="showcase-wrap">
+      <form class="showcase-form" id="sc-form">
+        <input type="text" id="sc-name" placeholder="Your name" maxlength="60" autocomplete="off" />
+        <input type="text" id="sc-title" placeholder="What is it? (optional)" maxlength="100" autocomplete="off" />
+        <input type="url" id="sc-url" placeholder="https://… your GitHub Pages or Vercel link" autocomplete="off" />
+        <button class="btn" type="submit">Add mine</button>
+      </form>
+      <div class="sc-msg" id="sc-msg"></div>
+      <div class="showcase-grid" id="sc-grid"><p class="hint">Loading projects…</p></div>
+    </div>`);
+  sheet.appendChild(wrap);
+  const grid = $('#sc-grid', wrap);
+
+  const load = async () => {
+    if (!sb) { grid.innerHTML = `<p class="hint">The showcase turns on once the class database is connected.</p>`; return; }
+    try {
+      const { data, error } = await sb.from('showcase').select('name,title,url,created_at').order('created_at', { ascending: false }).limit(200);
+      if (error) throw error;
+      if (!data || !data.length) { grid.innerHTML = `<p class="hint">No projects yet — be the first! 🚀</p>`; return; }
+      grid.innerHTML = data.map((d) => {
+        const safe = /^https?:\/\//.test(d.url) ? d.url : '#';
+        return `<a class="sc-card" href="${escapeHtml(safe)}" target="_blank" rel="noopener">
+          <span class="sc-title">${escapeHtml(d.title || 'My project')}</span>
+          <span class="sc-by">by ${escapeHtml(d.name)}</span>
+          <span class="sc-link">${escapeHtml(d.url.replace(/^https?:\/\//, ''))} ↗</span>
+        </a>`;
+      }).join('');
+    } catch { grid.innerHTML = `<p class="hint">Couldn't load projects right now — try again in a moment.</p>`; }
+  };
+  load();
+
+  $('#sc-form', wrap).addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const msg = $('#sc-msg', wrap);
+    const name = $('#sc-name', wrap).value.trim();
+    const title = $('#sc-title', wrap).value.trim();
+    const url = $('#sc-url', wrap).value.trim();
+    if (!name || !url) { msg.textContent = 'Add your name and a link.'; return; }
+    msg.textContent = 'Adding…';
+    try {
+      const res = await fetch('/api/showcase', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name, title, url }) });
+      const d = await res.json().catch(() => ({}));
+      if (res.ok) {
+        msg.textContent = '';
+        $('#sc-name', wrap).value = ''; $('#sc-title', wrap).value = ''; $('#sc-url', wrap).value = '';
+        await load(); celebrate(wrap, '🎉 Added to the showcase!');
+      } else msg.textContent = d.error || 'Could not add — try again.';
+    } catch { msg.textContent = "Couldn't connect — try again."; }
+  });
+}
 
 /* ---------------- global search ---------------- */
 function stripText(s) { return s.replace(/<[^>]+>/g, ' ').replace(/&[a-z]+;/g, ' ').replace(/\s+/g, ' ').trim(); }
