@@ -190,6 +190,10 @@ source ~/.zshrc</code></pre>
     unlock: '2026-06-18T11:00:00Z', // Thu Jun 18, 2026, 7:00 AM New York time
     sections: [
       {
+        key: 'class1.outcomes',
+        html: `<div class="outcomes"><span class="outcomes-h">By the end of today you'll be able to…</span> build a working to-do app and change how it looks &amp; works — just by describing what you want to Claude.</div>`,
+      },
+      {
         key: 'class1.goal',
         html: `<p class="lead">Goal: learn the core words, then build a working to-do app — today.</p>`,
       },
@@ -252,6 +256,10 @@ source ~/.zshrc</code></pre>
     nav: 'Class 2',
     unlock: '2026-06-25T11:00:00Z', // Thu Jun 25, 2026, 7:00 AM New York time
     sections: [
+      {
+        key: 'class2.outcomes',
+        html: `<div class="outcomes"><span class="outcomes-h">By the end of today you'll be able to…</span> put your own app on the internet with a link you can share — and update the live site anytime you change something.</div>`,
+      },
       {
         key: 'class2.goal',
         html: `<p class="lead">Goal: take the app on your computer and put it on the real internet, with a link you can share.</p>`,
@@ -328,6 +336,10 @@ Production: https://my-app.vercel.app</pre></div>
     nav: 'Class 3',
     unlock: '2026-07-16T11:00:00Z', // Thu Jul 16, 2026, 7:00 AM New York time
     sections: [
+      {
+        key: 'class3.outcomes',
+        html: `<div class="outcomes"><span class="outcomes-h">By the end of today you'll be able to…</span> plan and build a more complete app of your own — start to finish — and put it online to share.</div>`,
+      },
       {
         key: 'class3.goal',
         html: `<p class="lead">Goal: use everything from Class 1 &amp; 2 to build and ship a more complete app.</p>`,

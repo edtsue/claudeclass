@@ -205,7 +205,7 @@ const WIZ = {
     os: 'Mac', shell: 'Terminal',
     steps: [
       { title: 'Open Terminal', body: 'Press <kbd>Cmd</kbd>+<kbd>Space</kbd>, type "Terminal", and press Enter.' },
-      { title: 'Install Claude Code', body: 'Paste this and press Enter. No admin password needed — it installs just for you.', cmd: 'curl -fsSL https://claude.ai/install.sh | bash' },
+      { title: 'Install Claude Code', body: 'Paste this and press Enter. <strong>No admin password needed</strong> — it installs into your own account. <em>You do not need to type "zsh" first</em> (your Terminal already uses zsh), and <strong>don\'t use "sudo".</strong> If something pops up asking for an admin password, you can cancel it — this installer never needs one.', cmd: 'curl -fsSL https://claude.ai/install.sh | bash' },
       { title: 'Start it up', body: 'Launch Claude Code by typing:', cmd: 'claude' },
       { title: "Didn't start? Point your Mac to it (no admin)", body: 'If you saw the Claude welcome screen, tap "It worked" to skip this. If it said <strong>"command not found"</strong>, Claude installed into a hidden folder in your account (<code>~/.local/bin</code>), and your Terminal — which uses <em>zsh</em> — just needs to be told where. No admin password needed. Paste <strong>both</strong> lines, then type <code>claude</code> again:', cmd: `echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc\nsource ~/.zshrc` },
       { title: 'Trust the folder & log in', body: 'Choose <strong>"Yes, I trust this folder"</strong> and press Enter, then log in with your Claude account in the browser window that opens.' },

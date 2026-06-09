@@ -232,6 +232,16 @@ kbd {
   font-size: 0.98rem;
 }
 
+/* Per-class outcomes box */
+.outcomes {
+  background: linear-gradient(180deg, var(--accent-soft), transparent 120%);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-sm);
+  padding: 0.85rem 1.05rem;
+  font-size: 1.02rem;
+}
+.outcomes-h { display: block; font-family: "Geist Mono", monospace; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--accent-strong); margin-bottom: 0.3rem; }
+
 /* Collapsible full written steps (setup) */
 .full-steps { margin-top: 1.6rem; border-top: 1px solid var(--hairline); }
 .full-steps > summary { cursor: pointer; font-weight: 600; list-style: none; padding: 0.9rem 0 0.4rem; color: var(--accent-strong); }
