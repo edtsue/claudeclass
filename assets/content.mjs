@@ -589,6 +589,7 @@ export const ROSTER = [
   'Kevyn K', 'Robin H', 'Yu T', 'Ryu N',
   'Zoe M', 'Jineen C', 'Ian F', 'Hayley M',
   'Joshua E', 'Gianfranco L', 'Christina K', 'Vale P',
+  'Ross M.', 'Anna T.',
 ];
 export const COHORT_SIZE = 4;
 
