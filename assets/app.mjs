@@ -234,7 +234,7 @@ function buildWizard(root) {
   const save = () => LS.set('wizard', { os: state.os, step: state.step });
 
   async function ask(text, image, outEl) {
-    outEl.innerHTML = `<p class="wiz-thinking">Clawde is looking…</p>`;
+    outEl.innerHTML = `<p class="wiz-thinking">Claude is looking…</p>`;
     const cfg = WIZ[state.os]; const step = cfg && cfg.steps[state.step];
     const prompt = `I'm a beginner installing Claude Code on ${cfg ? cfg.os : 'my computer'}. I'm on this step: "${step ? step.title : ''}". ${text ? 'My problem: ' + text : 'I attached a screenshot of my screen.'} Tell me in simple steps what is wrong and exactly what to do next.`;
     try {
@@ -289,7 +289,7 @@ function buildWizard(root) {
         <button class="btn ghost" id="wiz-stuck">I'm stuck 🆘</button>
       </div>
       <div class="wiz-help" id="wiz-help" hidden>
-        <p class="hint">Tell Clawde what happened, or upload a screenshot of your screen:</p>
+        <p class="hint">Tell Claude what happened, or upload a screenshot of your screen:</p>
         <div class="wiz-help-row">
           <button class="chat-attach" id="wiz-attach" title="Attach a screenshot" type="button">📎</button>
           <input type="file" id="wiz-file" accept="image/*" hidden />
@@ -600,7 +600,7 @@ const SUGGESTIONS = [
 function buildChat() {
   $('#chat-suggest').innerHTML = SUGGESTIONS.map((s) => `<button>${s}</button>`).join('');
   $$('#chat-suggest button').forEach((b) => b.addEventListener('click', () => { $('#chat-text').value = b.textContent; sendChat(); }));
-  if (!chatHistory.length) addMsg('bot', "Hi, I'm Clawde — your class helper. Ask me anything: a word you don't get, what a command does, or just what to try next!");
+  if (!chatHistory.length) addMsg('bot', "Hi, I'm Claude — your class helper. Ask me anything: a word you don't get, what a command does, or just what to try next!");
 }
 function addMsg(role, text, cls = '') {
   const log = $('#chat-log');
@@ -641,7 +641,7 @@ async function sendChat() {
   chatHistory.push({ role: 'user', text: q || "Here's a screenshot of my screen — what's happening and how do I fix it?" });
   $('#chat-suggest').style.display = 'none';
   const imageToSend = pendingImage; clearPending();
-  const thinking = addMsg('bot', 'Clawde is thinking…', 'thinking');
+  const thinking = addMsg('bot', 'Claude is thinking…', 'thinking');
   try {
     const res = await fetch('/api/ask', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -762,7 +762,7 @@ async function boot() {
   buildChat();
   checkGate();
 
-  // Clawde says hi once per session (only if the gate is already open)
+  // Claude says hi once per session (only if the gate is already open)
   setTimeout(() => {
     if ($('#gate').style.display === 'none' && !sessionStorage.getItem('cc:tip')) {
       showMascotTip();

@@ -606,7 +606,7 @@ html[data-motion="off"] .glass { background: var(--glass-2); }
   main { margin-top: 1.4rem; }
 }
 
-/* ---------- Clawde personality ---------- */
+/* ---------- Claude personality ---------- */
 .fab.assistant:hover { animation: wiggle 0.5s var(--ease); }
 @keyframes wiggle { 0%,100% { transform: rotate(0) translateY(-3px) scale(1.04); } 25% { transform: rotate(-9deg) translateY(-3px) scale(1.06); } 75% { transform: rotate(9deg) translateY(-3px) scale(1.06); } }
 
