@@ -212,6 +212,18 @@ source ~/.zshrc</code></pre>
         `,
       },
       {
+        key: 'class1.slides',
+        html: `
+          <details class="full-steps slides-block">
+            <summary>📽️ Class 1 slides — open the deck</summary>
+            <div class="slides-embed">
+              <iframe src="https://docs.google.com/presentation/d/1NVNsjiv1USoNBx17I1CtB1D212jmRkhwvJVSpMuzWe8/embed?start=false&amp;loop=false&amp;delayms=3000" allowfullscreen loading="lazy" title="Class 1 slides"></iframe>
+            </div>
+            <p class="hint">Trouble seeing it? <a href="https://docs.google.com/presentation/d/1NVNsjiv1USoNBx17I1CtB1D212jmRkhwvJVSpMuzWe8/edit" target="_blank" rel="noopener">Open the slides in a new tab</a>.</p>
+          </details>
+        `,
+      },
+      {
         key: 'class1.concepts',
         html: `
           <h3>The words you'll hear</h3>

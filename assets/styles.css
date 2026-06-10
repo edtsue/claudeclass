@@ -252,6 +252,8 @@ kbd {
 .full-steps[open] > summary::before { content: "▾ "; }
 .full-steps-body .region { margin-top: 1.4rem; padding-top: 1.4rem; border-top: 1px solid var(--hairline); }
 .full-steps-body .region:first-child { margin-top: 0.6rem; border-top: none; padding-top: 0; }
+.slides-embed { position: relative; width: 100%; aspect-ratio: 16 / 9; margin: 1rem 0 0.4rem; border-radius: 14px; overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,0.12); }
+.slides-embed iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 
 /* Setup wizard */
 .wizard { border: 1.5px solid var(--accent); background: linear-gradient(180deg, var(--accent-soft), transparent 90%); border-radius: var(--radius-sm); padding: 1.1rem 1.2rem; margin-bottom: 1.8rem; }
