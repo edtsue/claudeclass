@@ -234,6 +234,12 @@ kbd {
   font-size: 0.98rem;
 }
 
+/* Snag / fix-it callout (setup troubleshooting) */
+.snag-fix { background: var(--glass-2); border: 1px solid var(--accent); border-radius: var(--radius-sm); padding: 0.9rem 1.05rem; margin: 1rem 0; }
+.snag-fix > strong:first-child { display: block; margin-bottom: 0.45rem; color: var(--accent-strong); }
+.snag-fix pre.cmd { margin: 0.55rem 0; }
+.snag-fix p { margin: 0.5rem 0; }
+
 /* Per-class outcomes box */
 .outcomes {
   background: linear-gradient(180deg, var(--accent-soft), transparent 120%);

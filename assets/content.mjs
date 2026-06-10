@@ -132,11 +132,30 @@ source ~/.zshrc</code></pre>
                   <pre class="cmd"><code>claude</code></pre>
                 </li>
                 <li>A browser opens — log in with your Claude account. Done! 🎉</li>
-                <li><strong>If it says "not recognized":</strong> Claude Code installed in a <em>hidden</em> folder inside your account — <code>C:\Users\your-name\.local\bin</code> — and Windows doesn't know to look there yet. Add it to your <em>personal</em> PATH (no admin needed) by pasting this in PowerShell:
-                  <pre class="cmd"><code>[Environment]::SetEnvironmentVariable("PATH", "$env:PATH;$env:USERPROFILE\.local\bin", "User")</code></pre>
+                <li><strong>If it says "not recognized":</strong> Claude Code installed in a <em>hidden</em> folder inside your account — <code>C:\\Users\\your-name\\.local\\bin</code> — and Windows doesn't know to look there yet. Add it to your <em>personal</em> PATH (no admin needed) by pasting these two lines in PowerShell:
+                  <pre class="cmd"><code>$p = [Environment]::GetEnvironmentVariable("PATH", "User")
+[Environment]::SetEnvironmentVariable("PATH", "$p;$env:USERPROFILE\\.local\\bin", "User")</code></pre>
                   Then close PowerShell, open it again, and type <code>claude</code>. <span class="hint">(To see the hidden folder in File Explorer: View → Show → Hidden items.)</span>
                 </li>
               </ol>
+
+              <div class="snag-fix">
+                <strong>🚫 Saw "blocked by a Group Policy" (Gruppenrichtlinie)? Most work laptops do — here's the fix.</strong>
+                <p>Your company blocks apps from running out of the temporary download folder, so the installer gets stopped on its last step. Good news: it already finished <em>downloading</em> Claude before it was blocked — you just move that file into your own folder and run it from there. <strong>No admin password needed.</strong></p>
+                <p>Paste this whole block into PowerShell and press Enter:</p>
+                <pre class="cmd"><code>New-Item -ItemType Directory -Force "$env:USERPROFILE\\.local\\bin" | Out-Null
+$src = Get-ChildItem "$env:USERPROFILE\\.claude\\downloads\\claude-*win32-x64.exe" | Sort-Object LastWriteTime | Select-Object -Last 1
+Copy-Item $src.FullName "$env:USERPROFILE\\.local\\bin\\claude.exe" -Force
+Unblock-File "$env:USERPROFILE\\.local\\bin\\claude.exe"
+$p = [Environment]::GetEnvironmentVariable("PATH", "User")
+[Environment]::SetEnvironmentVariable("PATH", "$p;$env:USERPROFILE\\.local\\bin", "User")</code></pre>
+                <p class="hint">Plain English, line by line: make your personal <code>.local\\bin</code> folder → copy the Claude you already downloaded into it (renamed <code>claude.exe</code>) → clear the “downloaded from the internet” flag → add that folder to your personal PATH so the terminal can find it.</p>
+                <p>Now <strong>fully close PowerShell, open a fresh window</strong>, and check it worked:</p>
+                <pre class="cmd"><code>claude --version</code></pre>
+                <p><strong>See a version number?</strong> 🎉 You're installed — head to <strong>“Logging in”</strong> below.</p>
+                <p class="hint"><strong>Got “Cannot find path …\\.claude\\downloads”?</strong> The download never happened. Run <code>irm https://claude.ai/install.ps1 | iex</code> once more (it'll stop at the same Group-Policy step, but it leaves the file behind), then paste the block above again.</p>
+                <p class="hint"><strong>Still says “blocked by a Group Policy” after all that?</strong> Then your company blocks <em>every</em> app outside the official Program Files area — there's no self-serve workaround. Send IT this one line: <em>“Please allowlist <code>%USERPROFILE%\\.local\\bin\\claude.exe</code> in AppLocker / Software Restriction Policy so I can run Claude Code.”</em> (The <code>winget</code> and Desktop-app installs usually hit the same wall.) Bring it to office hours and we'll help.</p>
+              </div>
             </div>
 
           </div>
@@ -149,6 +168,30 @@ source ~/.zshrc</code></pre>
           <p>In the terminal, type:</p>
           <pre class="cmd"><code>claude --version</code></pre>
           <p>If you see a version number, you're ready. 🎉 If you see "command not found", see fixes below.</p>
+        `,
+      },
+      {
+        key: 'setup.login',
+        html: `
+          <h3>Logging in — Mac &amp; Windows (same on both)</h3>
+          <p>Installed? Now you connect Claude Code to your paid Claude account. <strong>This part is identical on Mac and Windows.</strong> No API key, no credit-card details in the terminal — just your normal Claude login.</p>
+          <ol class="steps">
+            <li>In your terminal, type <code>claude</code> and press Enter:
+              <pre class="cmd"><code>claude</code></pre>
+            </li>
+            <li><strong>First time only:</strong> it asks a couple of quick setup questions — pick a colour theme with the <kbd>↑</kbd>/<kbd>↓</kbd> arrow keys and press <kbd>Enter</kbd>. Any choice is fine.</li>
+            <li>It asks <strong>how you want to log in</strong>. Choose <strong>“Claude account with subscription”</strong> (your Pro or Max plan) and press <kbd>Enter</kbd>. <span class="hint">The other option — “Anthropic Console / API key” — is separate pay-as-you-go billing. Not what we're using.</span></li>
+            <li>Your <strong>web browser opens</strong> to a Claude sign-in page. Sign in if asked, then click <strong>Authorize</strong>.</li>
+            <li>The browser says you can return to Claude Code. Switch back to your terminal — it now shows you're <strong>logged in</strong>. 🎉</li>
+            <li>The first time you open a project folder, Claude asks <strong>“Do you trust the files in this folder?”</strong> Choose <strong>“Yes, I trust this folder”</strong> and press <kbd>Enter</kbd>.</li>
+            <li>That's it — type a message to Claude and you're working!</li>
+          </ol>
+          <div class="snag-fix">
+            <strong>🌐 Browser didn't open, or you're not sure it signed in?</strong>
+            <p>At the login prompt in the terminal, press the <kbd>c</kbd> key — that <strong>copies the sign-in link</strong>. Paste it into any browser and sign in. After you authorize, the page shows a <strong>code</strong>: copy it, return to the terminal, paste it at the <em>“Paste code here”</em> prompt, and press <kbd>Enter</kbd>.</p>
+            <p class="hint">Pasting into the terminal: Mac is <kbd>Cmd</kbd>+<kbd>V</kbd>. Windows PowerShell is <strong>right-click</strong> (or <kbd>Ctrl</kbd>+<kbd>V</kbd>).</p>
+          </div>
+          <p class="hint"><strong>Need to log in again later?</strong> Inside Claude Code, type <code>/login</code> and press Enter. To switch accounts, type <code>/logout</code> first, then <code>/login</code>. Type <code>/status</code> to see which account you're signed in as.</p>
         `,
       },
       {
