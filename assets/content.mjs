@@ -393,51 +393,59 @@ Production: https://my-app.vercel.app</pre></div>
   },
 
   class3: {
-    title: 'Class 3 — Build Something Real',
+    title: 'Class 3 — Power-Ups',
     nav: 'Class 3',
     unlock: '2026-07-16T11:00:00Z', // Thu Jul 16, 2026, 7:00 AM New York time
     sections: [
       {
         key: 'class3.outcomes',
-        html: `<div class="outcomes"><span class="outcomes-h">By the end of today you'll be able to…</span> plan and build a more complete app of your own — start to finish — and put it online to share.</div>`,
+        html: `<div class="outcomes"><span class="outcomes-h">By the end of today you'll be able to…</span> add real <strong>power-ups</strong> to your app — connect outside services, import data, save settings, and even run tasks automatically.</div>`,
       },
       {
         key: 'class3.goal',
-        html: `<p class="lead">Goal: use everything from Class 1 &amp; 2 to build and ship a more complete app.</p>`,
+        html: `<p class="lead">Goal: level up the app you already have. Pick one or two power-ups that fit what you're building, and wire them in with Claude.</p>`,
       },
       {
         key: 'class3.agenda',
         html: `
           <h3>Agenda <span class="dur">90 min</span></h3>
           <ul class="agenda">
-            <li><span class="t">0:00</span> Pick your app (expense tracker, habit tracker, RSVP page…)</li>
-            <li><span class="t">0:10</span> Plan it with Claude (describe it → get a simple spec)</li>
-            <li><span class="t">0:20</span> Build the core features, one at a time</li>
-            <li><span class="t">1:00</span> Push &amp; deploy</li>
-            <li><span class="t">1:15</span> Polish + one stretch feature</li>
-            <li><span class="t">1:25</span> Wrap + where to go next</li>
+            <li><span class="t">0:00</span> Recap + today: bolt power-ups onto your app</li>
+            <li><span class="t">0:08</span> The power-up menu — what each one is &amp; when you'd want it</li>
+            <li><span class="t">0:20</span> Pick the power-up(s) that fit your app</li>
+            <li><span class="t">0:28</span> Build power-up #1 with Claude, step by step</li>
+            <li><span class="t">0:55</span> Test it — handle the messy cases (empty, errors)</li>
+            <li><span class="t">1:05</span> Push &amp; deploy</li>
+            <li><span class="t">1:12</span> Stretch: add a second power-up</li>
+            <li><span class="t">1:22</span> Wrap + Showcase + where to go next</li>
           </ul>
+          <p class="hint">This is the most technical class — but <strong>Claude writes the code</strong>. Your job is the ideas and the steps, not memorising syntax.</p>
         `,
       },
       {
         key: 'class3.ideas',
         html: `
-          <h3>App ideas</h3>
-          <ul class="chips">
-            <li>Expense tracker</li><li>Habit tracker</li><li>Event RSVP page</li>
-            <li>Recipe box</li><li>Reading list</li><li>Workout log</li>
+          <h3>The power-up menu</h3>
+          <p>You don't need them all — add the ones your app actually needs.</p>
+          <ul class="powerups">
+            <li><strong>🔌 API keys</strong> — connect your app to an outside service (AI, weather, maps). The key is your secret pass; it lives in Vercel's settings, never in your code.</li>
+            <li><strong>⚙️ Settings</strong> — let users change how the app behaves (themes, options, preferences) and remember those choices.</li>
+            <li><strong>📄 Parse a CSV</strong> — let people upload a spreadsheet and pull the rows into your app (a contact list, expenses, a roster).</li>
+            <li><strong>⏰ Crons</strong> — make your app do something automatically on a timer: a daily summary, a nightly cleanup, a weekly digest. Runs even when nobody's looking.</li>
+            <li><strong>…and more</strong> — search &amp; filter, export to CSV/PDF, notifications. Ask Claude what fits.</li>
           </ul>
-          <p>Pick one that's useful to <em>you</em> — you'll stay motivated.</p>
+          <p class="metaphor">🔑 Power-ups are like <strong>kitchen gadgets</strong> for the bakery: a phone line to a supplier (API), a custom-order form (settings), a bulk-ingredient intake (CSV), and a timer that fires up the ovens at 5am every day (cron). Add the ones your shop needs.</p>
         `,
       },
       {
         key: 'class3.try',
         html: `
           <h3>Prompt starters — copy &amp; paste 🗣️</h3>
-          <pre class="cmd prompt"><code>I want to build a habit tracker. Ask me a few questions, then propose a simple plan before we build.</code></pre>
-          <pre class="cmd prompt"><code>Build the first feature from the plan. Keep it simple.</code></pre>
-          <pre class="cmd prompt"><code>Add a way to edit and delete items.</code></pre>
-          <pre class="cmd prompt"><code>It works! Help me deploy it and share the link.</code></pre>
+          <pre class="cmd prompt"><code>Which of these power-ups makes the most sense for my app? Here's what it does: [describe it].</code></pre>
+          <pre class="cmd prompt"><code>I want to add an AI/weather/maps feature. Help me get an API key, store it safely in Vercel, and call it from a serverless function.</code></pre>
+          <pre class="cmd prompt"><code>Add a settings panel where I can change [theme / options], and remember my choices.</code></pre>
+          <pre class="cmd prompt"><code>Let me upload a CSV file and show its rows in my app. Walk me through it.</code></pre>
+          <pre class="cmd prompt"><code>Set up a scheduled job that runs once a day and [does X]. Explain how crons work on Vercel.</code></pre>
         `,
       },
       {
@@ -445,9 +453,10 @@ Production: https://my-app.vercel.app</pre></div>
         html: `
           <h3>Keep going</h3>
           <ul class="todo" data-checklist="class3">
-            <li>Finish and deploy your app</li>
-            <li>Add one feature you didn't think was possible</li>
-            <li>Show someone what you made</li>
+            <li>Add at least one power-up and deploy it</li>
+            <li>Keep any API keys in Vercel's settings, <strong>not</strong> in your code</li>
+            <li>Add your upgraded app to the Showcase</li>
+            <li>Try a second power-up you didn't think you could pull off</li>
           </ul>
         `,
       },

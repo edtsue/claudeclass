@@ -382,6 +382,8 @@ ul.links a { font-weight: 600; font-family: "Geist Mono", monospace; font-size: 
 
 .chips { list-style: none; padding-left: 0; display: flex; flex-wrap: wrap; gap: 0.4rem; }
 .chips li { background: var(--glass-2); border: 1px solid var(--hairline); border-radius: 999px; padding: 0.25rem 0.7rem; font-size: 0.85rem; font-family: "Geist Mono", monospace; }
+.powerups { list-style: none; padding-left: 0; display: grid; gap: 0.6rem; }
+.powerups li { background: var(--glass-2); border: 1px solid var(--hairline); border-radius: var(--radius-sm); padding: 0.7rem 0.9rem; line-height: 1.5; }
 
 .path { counter-reset: step; list-style: none; padding-left: 0; }
 .path li { position: relative; padding: 0.5rem 0 0.5rem 2.4rem; }
@@ -411,8 +413,8 @@ ul.todo li.checked { color: var(--ink-soft); text-decoration: line-through; text
 @media (max-width: 640px) { .platforms { grid-template-columns: 1fr; } }
 
 /* Cohort cards */
-.cohorts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.7rem; }
-@media (max-width: 720px) { .cohorts { grid-template-columns: 1fr 1fr; } }
+.cohorts { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 0.7rem; }
+@media (max-width: 720px) { .cohorts { grid-auto-flow: row; grid-auto-columns: auto; grid-template-columns: 1fr 1fr; } }
 @media (max-width: 440px) { .cohorts { grid-template-columns: 1fr; } }
 .cohort-card { background: var(--glass-2); border: 1px solid var(--hairline); border-radius: var(--radius-sm); padding: 1rem 1.1rem; border-top: 3px solid var(--accent); }
 .cohort-card[data-c="2"] { border-top-color: #6ba368; }
