@@ -413,7 +413,8 @@ Production: https://my-app.vercel.app</pre></div>
             <li><span class="t">0:00</span> Recap + today: bolt power-ups onto your app</li>
             <li><span class="t">0:08</span> The power-up menu — what each one is &amp; when you'd want it</li>
             <li><span class="t">0:20</span> Pick the power-up(s) that fit your app</li>
-            <li><span class="t">0:28</span> Build power-up #1 with Claude, step by step</li>
+            <li><span class="t">0:26</span> Set up <strong>memory</strong> — give Claude a CLAUDE.md so it remembers your project across sessions</li>
+            <li><span class="t">0:34</span> Build power-up #1 with Claude, step by step</li>
             <li><span class="t">0:55</span> Test &amp; debug — open the inspector, read the red errors, paste them to Claude</li>
             <li><span class="t">1:05</span> Push &amp; deploy</li>
             <li><span class="t">1:12</span> Stretch: add a second power-up</li>
