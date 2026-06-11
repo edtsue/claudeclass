@@ -414,7 +414,7 @@ Production: https://my-app.vercel.app</pre></div>
             <li><span class="t">0:08</span> The power-up menu — what each one is &amp; when you'd want it</li>
             <li><span class="t">0:20</span> Pick the power-up(s) that fit your app</li>
             <li><span class="t">0:28</span> Build power-up #1 with Claude, step by step</li>
-            <li><span class="t">0:55</span> Test it — handle the messy cases (empty, errors)</li>
+            <li><span class="t">0:55</span> Test &amp; debug — open the inspector, read the red errors, paste them to Claude</li>
             <li><span class="t">1:05</span> Push &amp; deploy</li>
             <li><span class="t">1:12</span> Stretch: add a second power-up</li>
             <li><span class="t">1:22</span> Wrap + Showcase + where to go next</li>
@@ -447,6 +447,22 @@ Production: https://my-app.vercel.app</pre></div>
           <pre class="cmd prompt"><code>Add a settings panel where I can change [theme / options], and remember my choices.</code></pre>
           <pre class="cmd prompt"><code>Let me upload a CSV file and show its rows in my app. Walk me through it.</code></pre>
           <pre class="cmd prompt"><code>Set up a scheduled job that runs once a day and [does X]. Explain how crons work on Vercel.</code></pre>
+          <pre class="cmd prompt"><code>Here's the red error from the browser inspector: [paste it]. What's wrong and how do I fix it?</code></pre>
+        `,
+      },
+      {
+        key: 'class3.debug',
+        html: `
+          <h3>Stuck? Open the inspector 🔍</h3>
+          <p>When a power-up doesn't work, your browser has a built-in tool that shows you <em>why</em>: the <strong>inspector</strong> (also called DevTools).</p>
+          <ol class="steps">
+            <li><strong>Open it:</strong> right-click the page → <em>Inspect</em> (or press <code>⌥⌘I</code> on Mac / <code>F12</code> on Windows).</li>
+            <li><strong>Click the <em>Console</em> tab.</strong> That's where the app reports problems.</li>
+            <li><strong>Look for red text.</strong> Red = an error. That message is your clue.</li>
+            <li><strong>Copy the whole red message</strong> and paste it to Claude — you don't need to understand it yourself.</li>
+          </ol>
+          <p class="metaphor">🔑 The inspector is like <strong>lifting the hood of a car</strong>: you don't have to be a mechanic, but you can read the warning light and tell the mechanic (Claude) exactly what it says.</p>
+          <p class="hint">Tip: errors often point to a line or a word — paste that context too. The more Claude sees, the faster the fix.</p>
         `,
       },
       {
