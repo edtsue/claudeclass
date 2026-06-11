@@ -313,38 +313,44 @@ $p = [Environment]::GetEnvironmentVariable("PATH", "User")
     sections: [
       {
         key: 'class2.outcomes',
-        html: `<div class="outcomes"><span class="outcomes-h">By the end of today you'll be able to…</span> put your own app on the internet with a link you can share — and update the live site anytime you change something.</div>`,
+        html: `<div class="outcomes"><span class="outcomes-h">By the end of today you'll be able to…</span> put your app on the internet with a shareable link — <strong>and give it a memory, so it remembers things even after you close the tab.</strong></div>`,
       },
       {
         key: 'class2.goal',
-        html: `<p class="lead">Goal: take the app on your computer and put it on the real internet, with a link you can share.</p>`,
+        html: `<p class="lead">Goal: take the app on your computer, put it on the real internet, and connect it to a database so your data is saved in the cloud.</p>`,
       },
       {
         key: 'class2.agenda',
         html: `
           <h3>Agenda <span class="dur">90 min</span></h3>
           <ul class="agenda">
-            <li><span class="t">0:00</span> Recap — today we go live</li>
-            <li><span class="t">0:10</span> GitHub: repos, commits, push/pull (your project's save history + backup)</li>
-            <li><span class="t">0:30</span> Connect your project to GitHub, first push</li>
-            <li><span class="t">0:45</span> Vercel: connect the repo, deploy, get a live URL</li>
-            <li><span class="t">1:05</span> The loop: edit with Claude → push → it auto-deploys</li>
-            <li><span class="t">1:20</span> Recap + homework</li>
+            <li><span class="t">0:00</span> Recap — today we go live <em>and</em> give the app a memory</li>
+            <li><span class="t">0:08</span> The stack in plain English: Claude Code (builds it), GitHub (saves every version), Vercel (publishes it), Supabase (remembers your data)</li>
+            <li><span class="t">0:20</span> GitHub: connect your project, first push</li>
+            <li><span class="t">0:35</span> Vercel: connect the repo, deploy, get a live URL</li>
+            <li><span class="t">0:48</span> The loop: edit with Claude → push → it auto-deploys</li>
+            <li><span class="t">0:55</span> Supabase: what a database is, make a free project + one table</li>
+            <li><span class="t">1:10</span> Connect it: one simple save — refresh the page, your data's still there 🎉</li>
+            <li><span class="t">1:22</span> Recap + homework</li>
           </ul>
         `,
       },
       {
         key: 'class2.stack',
         html: `
-          <h3>The three tools</h3>
+          <h3>The four tools</h3>
           <ul>
-            <li><strong>Claude Code</strong> — writes &amp; edits your app.</li>
+            <li><strong>Claude Code</strong> — writes &amp; edits your app <em>(you already know this one)</em>.</li>
             <li><strong>GitHub</strong> — stores your project online, keeps every version.</li>
             <li><strong>Vercel</strong> — turns your project into a live website automatically.</li>
+            <li><strong>Supabase</strong> — a database in the cloud: it <em>remembers</em> your data so it's not lost on refresh.</li>
           </ul>
-          <p>Together: you change code → <code>push</code> to GitHub → Vercel publishes it. Magic loop.</p>
+          <p>Together: you change code → <code>push</code> to GitHub → Vercel publishes it → Supabase remembers your data. Magic loop.</p>
           <p class="metaphor">🔑 Think of a <strong>bakery</strong>: Claude Code is the baker, GitHub is the recipe archive
-          (every version saved), and Vercel is the shop window where customers see what you made.</p>
+          (every version saved), Vercel is the shop window where customers see what you made, and
+          <strong>Supabase is the order book</strong> — every order written down so nothing's ever forgotten.</p>
+          <p class="hint">A beginner-friendly truth: <strong>you don't write database code</strong>. You tell Claude what you want saved, and it wires Supabase up for you.</p>
+          <p class="hint">🔒 Safety: your database has a secret key. <strong>It never goes in your code</strong> — Claude helps you paste it into Vercel's settings.</p>
         `,
       },
       {
@@ -353,8 +359,8 @@ $p = [Environment]::GetEnvironmentVariable("PATH", "User")
           <h3>Prompt starters — copy &amp; paste 🗣️</h3>
           <pre class="cmd prompt"><code>Help me put this project on GitHub. Walk me through each step.</code></pre>
           <pre class="cmd prompt"><code>Now deploy it to Vercel and give me the live link.</code></pre>
-          <pre class="cmd prompt"><code>I made a change — help me push it so the live site updates.</code></pre>
-          <pre class="cmd prompt"><code>The deploy failed. Here's the error: [paste it here]. What do I do?</code></pre>
+          <pre class="cmd prompt"><code>Connect this app to Supabase so my to-do items are saved and still there after I refresh.</code></pre>
+          <pre class="cmd prompt"><code>The save isn't working. Here's the error: [paste it here]. What do I do?</code></pre>
         `,
       },
       {
@@ -377,9 +383,9 @@ Production: https://my-app.vercel.app</pre></div>
         html: `
           <h3>Homework</h3>
           <ul class="todo" data-checklist="class2">
-            <li>Get your to-do app live on a Vercel URL</li>
-            <li>Make a change with Claude, push it, watch it update online</li>
-            <li>Share your live link with the class</li>
+            <li>Get your app live on a Vercel URL</li>
+            <li>Connect it to Supabase so your data survives a refresh</li>
+            <li>Add one thing you want it to remember, and share your live link</li>
           </ul>
         `,
       },
@@ -672,6 +678,7 @@ export const ROSTER = [
   'Zoe M', 'Jineen C', 'Ian F', 'Hayley M',
   'Joshua E', 'Gianfranco L', 'Christina K', 'Vale P',
   'Ross M.', 'Anna T.',
+  'Hugh F.', 'Dennis B.', 'Berna Y.',
 ];
 export const COHORT_SIZE = 4;
 
