@@ -432,6 +432,7 @@ Production: https://my-app.vercel.app</pre></div>
             <li><strong>⚙️ Settings</strong> — let users change how the app behaves (themes, options, preferences) and remember those choices.</li>
             <li><strong>📄 Parse a CSV</strong> — let people upload a spreadsheet and pull the rows into your app (a contact list, expenses, a roster).</li>
             <li><strong>⏰ Crons</strong> — make your app do something automatically on a timer: a daily summary, a nightly cleanup, a weekly digest. Runs even when nobody's looking.</li>
+            <li><strong>📝 Note-taking</strong> — add a notes panel where you can jot, edit, and save text — handy for journals, meeting notes, or scratch ideas. Saves to your database so notes are there next time.</li>
             <li><strong>…and more</strong> — search &amp; filter, export to CSV/PDF, notifications. Ask Claude what fits.</li>
           </ul>
           <p class="metaphor">🔑 Power-ups are like <strong>kitchen gadgets</strong> for the bakery: a phone line to a supplier (API), a custom-order form (settings), a bulk-ingredient intake (CSV), and a timer that fires up the ovens at 5am every day (cron). Add the ones your shop needs.</p>
