@@ -705,6 +705,7 @@ export const ROSTER = [
   'Joshua E', 'Gianfranco L', 'Christina K', 'Vale P',
   'Ross M.', 'Anna T.',
   'Hugh F.', 'Dennis B.', 'Berna Y.',
+  'Olivia N.',
 ];
 export const COHORT_SIZE = 4;
 
