@@ -443,7 +443,7 @@ function glossarize(rootEl) {
 /* ---------------- cohorts + dice ---------------- */
 function shuffle(arr) { const a = [...arr]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
 // Number of teams: aim for ~COHORT_SIZE per team, but keep teams balanced.
-const NUM_COHORTS = Math.max(1, Math.floor(ROSTER.length / COHORT_SIZE)); // 18 → 4 teams (5,5,4,4)
+const numCohorts = (len) => Math.max(1, Math.floor(len / COHORT_SIZE)); // 18 → 4 teams (5,5,4,4)
 function splitInto(arr, n) {
   const out = Array.from({ length: n }, () => []);
   arr.forEach((x, i) => out[i % n].push(x)); // round-robin → sizes differ by at most 1
@@ -458,7 +458,17 @@ function buildCohorts(root) {
       <p class="hint" style="margin:.8rem 0 0">👑 = your cohort captain (the top name on each team).</p>
       <div class="dice-wrap">
         <button class="btn" id="dice" title="Draw new teams"><span class="die">🎲</span> Reshuffle cohorts</button>
-        <p class="hint" style="margin:.5rem 0 0">Saved in this browser. (Project it on screen to draw teams live.)</p>
+        <p class="hint" style="margin:.5rem 0 0">Teams are saved in this browser. (Project it on screen to draw teams live.)</p>
+      </div>
+      <div class="roster-edit" hidden>
+        <h3>Roster</h3>
+        <p class="hint" style="margin:0 0 .6rem">Add or remove students live — changes save to the class database and show for everyone. New names join the smallest team; reshuffle to rebalance.</p>
+        <div id="roster-list" class="waitlist"><p class="hint">Loading…</p></div>
+        <form id="rl-form" class="wl-form">
+          <input id="rl-name" placeholder="Add a student name" maxlength="60" autocomplete="off" />
+          <button class="btn" type="submit">Add name</button>
+        </form>
+        <div class="wl-msg" id="rl-msg"></div>
       </div>
       <div class="waitlist-wrap">
         <h3>Waitlist</h3>
@@ -473,29 +483,91 @@ function buildCohorts(root) {
   sheet.appendChild(wrap);
   const board = $('#cohort-board', wrap);
 
-  const draw = (groups) => {
-    board.innerHTML = groups.map((g, i) => `
+  // Live roster: [{id, name}]. Reads come from Supabase (public); falls back to the
+  // seeded ROSTER when the database isn't connected (offline / local preview).
+  let roster = ROSTER.map((name) => ({ id: null, name }));
+  let groups = LS.get('cohorts', null);
+  const names = () => roster.map((r) => r.name);
+
+  const draw = (gs) => {
+    board.innerHTML = gs.map((g, i) => `
       <div class="cohort-card" data-c="${i + 1}">
         <h3>Cohort ${i + 1}</h3>
         <ul>${g.map((n, idx) => idx === 0
-          ? `<li class="captain" title="Cohort captain">👑 ${n}</li>`
-          : `<li>${n}</li>`).join('')}</ul>
+          ? `<li class="captain" title="Cohort captain">👑 ${escapeHtml(n)}</li>`
+          : `<li>${escapeHtml(n)}</li>`).join('')}</ul>
       </div>`).join('');
   };
 
-  let groups = LS.get('cohorts', null);
-  // Regenerate if there's no saved draw, or the roster/team count changed (e.g. old 5-team cache).
-  if (!groups || groups.length !== NUM_COHORTS || groups.flat().length !== ROSTER.length) {
-    groups = splitInto(ROSTER, NUM_COHORTS);
-  }
-  draw(groups);
+  // Build a fresh balanced draw from the current roster.
+  const freshGroups = () => splitInto(names(), numCohorts(names().length));
+
+  // Keep the existing draw but reconcile it with the live roster: drop departed
+  // names and slot new ones into the smallest team, so the board stays stable as
+  // students are added/removed (rather than reshuffling everyone each edit).
+  const reconcile = () => {
+    const cur = names();
+    const curSet = new Set(cur);
+    if (!Array.isArray(groups) || !groups.length || groups.flat().length === 0) { groups = freshGroups(); }
+    else {
+      groups = groups.map((g) => g.filter((n) => curSet.has(n)));
+      const placed = new Set(groups.flat());
+      cur.forEach((n) => {
+        if (placed.has(n)) return;
+        let si = 0; for (let i = 1; i < groups.length; i++) if (groups[i].length < groups[si].length) si = i;
+        groups[si].push(n); placed.add(n);
+      });
+    }
+    LS.set('cohorts', groups);
+    draw(groups);
+  };
+
+  reconcile(); // first paint from the seed; refreshed once the DB roster loads
 
   $('#dice', wrap).addEventListener('click', () => {
-    groups = splitInto(shuffle(ROSTER), NUM_COHORTS);
+    groups = splitInto(shuffle(names()), numCohorts(names().length));
     LS.set('cohorts', groups);
     draw(groups);
     board.classList.remove('rolled'); void board.offsetWidth; board.classList.add('rolled');
     const die = $('#dice .die', wrap); die.classList.remove('spin'); void die.offsetWidth; die.classList.add('spin');
+  });
+
+  // Roster (live) — public read; add/remove only in edit mode (saved to Supabase).
+  const rlList = $('#roster-list', wrap);
+  if (editing) $('.roster-edit', wrap).hidden = false;
+  const renderRoster = () => {
+    if (!editing) return;
+    if (!roster.length) { rlList.innerHTML = `<p class="hint">No students on the roster yet.</p>`; return; }
+    rlList.innerHTML = roster.map((r) => `<span class="wl-item">${escapeHtml(r.name)}${r.id != null ? `<button class="wl-x" data-id="${r.id}" title="Remove" type="button">✕</button>` : ''}</span>`).join('');
+    $$('.wl-x', rlList).forEach((b) => b.addEventListener('click', async () => {
+      b.disabled = true;
+      const res = await fetch('/api/roster', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'remove', id: b.dataset.id }) }).catch(() => null);
+      if (res && res.ok) await loadRoster(); else { b.disabled = false; $('#rl-msg', wrap).textContent = 'Could not remove — are you in edit mode?'; }
+    }));
+  };
+
+  const loadRoster = async () => {
+    if (sb) {
+      try {
+        const { data, error } = await sb.from('roster').select('id,name').order('position', { ascending: true }).order('id', { ascending: true });
+        if (error) throw error;
+        if (data && data.length) roster = data;
+      } catch { /* keep the seeded fallback */ }
+    }
+    reconcile();
+    renderRoster();
+  };
+  loadRoster();
+
+  $('#rl-form', wrap).addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const name = $('#rl-name', wrap).value.trim(); if (!name) return;
+    const msg = $('#rl-msg', wrap); msg.textContent = 'Adding…';
+    try {
+      const res = await fetch('/api/roster', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'add', name }) });
+      if (res.ok) { $('#rl-name', wrap).value = ''; msg.textContent = ''; await loadRoster(); }
+      else { const d = await res.json().catch(() => ({})); msg.textContent = d.error || 'Could not add — are you in edit mode?'; }
+    } catch { msg.textContent = "Couldn't connect — try again."; }
   });
 
   // Waitlist — public read; add/remove only in edit mode (saved to Supabase)

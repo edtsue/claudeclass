@@ -1,5 +1,5 @@
 // ClaudeClass service worker — network-first (fresh when online, cached offline).
-const CACHE = 'claudeclass-v1';
+const CACHE = 'claudeclass-v2';
 const PRECACHE = ['/', '/index.html', '/assets/styles.css', '/assets/app.mjs', '/assets/content.mjs', '/assets/config.mjs'];
 
 self.addEventListener('install', (e) => {
