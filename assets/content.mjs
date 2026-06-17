@@ -63,7 +63,7 @@ export const CONTENT = {
           <h3>Start here</h3>
           <p>New? Open <a href="#/setup">Setup</a> and get Claude Code running.
           Already set up? Jump to <a href="#/class1">Class 1</a>. Stuck on a word?
-          The <a href="#/reference">Reference</a> explains everything in plain English.</p>
+          The <a href="#/reference">Glossary</a> explains everything in plain English.</p>
         `,
       },
     ],
@@ -270,7 +270,7 @@ $p = [Environment]::GetEnvironmentVariable("PATH", "User")
         key: 'class1.concepts',
         html: `
           <h3>The words you'll hear</h3>
-          <p>Skim these — every one has a plain-English definition <em>and a metaphor</em> in the <a href="#/reference">Reference</a>.</p>
+          <p>Skim these — every one has a plain-English definition <em>and a metaphor</em> in the <a href="#/reference">Glossary</a>.</p>
           <ul class="chips">
             <li>terminal</li><li>files &amp; folders</li><li>HTML</li><li>app</li>
             <li>API</li><li>MCP</li><li>git</li><li>push</li><li>pull</li>
@@ -512,8 +512,8 @@ Production: https://my-app.vercel.app</pre></div>
   },
 
   reference: {
-    title: 'Reference',
-    nav: 'Reference',
+    title: 'Glossary',
+    nav: 'Glossary',
     sections: [
       {
         key: 'reference.intro',
@@ -588,7 +588,7 @@ Production: https://my-app.vercel.app</pre></div>
 
             <details class="faq-item">
               <summary>Do I have to memorize all the commands?</summary>
-              <div><p>Nope. Keep the <a href="#/reference">Reference</a> open and copy-paste. You'll remember the handful you use most without trying.</p></div>
+              <div><p>Nope. Keep the <a href="#/reference">Glossary</a> open and copy-paste. You'll remember the handful you use most without trying.</p></div>
             </details>
           </div>
         `,

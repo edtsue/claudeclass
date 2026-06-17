@@ -1005,7 +1005,7 @@ const SEARCH_INDEX = (() => {
     idx.push({ id, title: p.title, nav: p.nav, raw, text: (p.title + ' ' + p.nav + ' ' + raw).toLowerCase() });
   }
   for (const r of REFERENCE) {
-    idx.push({ id: 'reference', title: r.term, nav: 'Reference', raw: r.def, text: (r.term + ' ' + r.def + ' ' + (r.meta || '')).toLowerCase() });
+    idx.push({ id: 'reference', title: r.term, nav: 'Glossary', raw: r.def, text: (r.term + ' ' + r.def + ' ' + (r.meta || '')).toLowerCase() });
   }
   return idx;
 })();
