@@ -639,10 +639,19 @@ function showMascotTip() {
 }
 
 /* ---------------- reference search ---------------- */
+const REF_LEVELS = [
+  { id: 101, name: 'Novice', blurb: 'The words you meet first.' },
+  { id: 201, name: 'Intermediate', blurb: 'Once you\'re building for real.' },
+  { id: 301, name: 'Expert', blurb: 'Power-user territory.' },
+];
 function buildReference(root) {
   const sheet = $('.sheet', root);
   const wrap = el(`
     <div class="ref-wrap">
+      <div class="ref-levels" role="tablist" aria-label="Filter by level">
+        <button class="ref-lvl-pill on" data-level="all">All</button>
+        ${REF_LEVELS.map((l) => `<button class="ref-lvl-pill lvl-${l.id}" data-level="${l.id}">${l.id} · ${l.name}</button>`).join('')}
+      </div>
       <div class="search-wrap">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
         <input type="search" id="ref-search" placeholder="Search terms & commands…" autocomplete="off">
@@ -651,27 +660,44 @@ function buildReference(root) {
     </div>`);
   sheet.appendChild(wrap);
   const listEl = $('#ref-list', wrap);
+  let activeLevel = 'all';
 
-  const draw = (q = '') => {
-    const term = q.toLowerCase().trim();
+  const card = (i) => `
+    <div class="ref-item lvl-${i.level}">
+      <div class="term">${i.term}<span class="ref-tag">${i.cat}</span></div>
+      <div class="def">${i.def}</div>
+      ${i.meta ? `<div class="ref-meta">🔑 ${i.meta}</div>` : ''}
+      ${i.ex ? `<div class="ref-ex">${i.ex}</div>` : ''}
+      ${i.url ? `<a class="ref-learn" href="${i.url}" target="_blank" rel="noopener noreferrer">Learn more ↗</a>` : ''}
+    </div>`;
+
+  const draw = () => {
+    const term = ($('#ref-search', wrap).value || '').toLowerCase().trim();
     const items = REFERENCE.filter((r) =>
-      !term || r.term.toLowerCase().includes(term) || r.def.toLowerCase().includes(term) || (r.meta || '').toLowerCase().includes(term));
-    if (!items.length) { listEl.innerHTML = `<p class="no-results">No matches for "${q}". Try a simpler word, or ask the Claude helper.</p>`; return; }
-    const cats = [...new Set(items.map((i) => i.cat))];
-    listEl.innerHTML = cats.map((cat) => `
-      <div class="ref-cat">
-        <h3>${cat}</h3>
-        ${items.filter((i) => i.cat === cat).map((i) => `
-          <div class="ref-item">
-            <div class="term">${i.term}</div>
-            <div class="def">${i.def}</div>
-            ${i.meta ? `<div class="ref-meta">🔑 ${i.meta}</div>` : ''}
-            ${i.ex ? `<div class="ref-ex">${i.ex}</div>` : ''}
-          </div>`).join('')}
-      </div>`).join('');
+      (activeLevel === 'all' || r.level === activeLevel) &&
+      (!term || r.term.toLowerCase().includes(term) || r.def.toLowerCase().includes(term) || (r.meta || '').toLowerCase().includes(term)));
+    if (!items.length) { listEl.innerHTML = `<p class="no-results">No matches for "${term}". Try a simpler word, or ask the Claude helper.</p>`; return; }
+    listEl.innerHTML = REF_LEVELS
+      .filter((l) => items.some((i) => i.level === l.id))
+      .map((l) => `
+        <div class="ref-level lvl-${l.id}">
+          <div class="ref-level-head">
+            <span class="ref-level-badge">${l.id}</span>
+            <h3>${l.name}</h3>
+            <span class="ref-level-blurb">${l.blurb}</span>
+          </div>
+          ${items.filter((i) => i.level === l.id).map(card).join('')}
+        </div>`).join('');
   };
+
+  $$('.ref-lvl-pill', wrap).forEach((pill) => pill.addEventListener('click', () => {
+    const v = pill.dataset.level;
+    activeLevel = v === 'all' ? 'all' : Number(v);
+    $$('.ref-lvl-pill', wrap).forEach((p) => p.classList.toggle('on', p === pill));
+    draw();
+  }));
+  $('#ref-search', wrap).addEventListener('input', draw);
   draw();
-  $('#ref-search', sheet).addEventListener('input', (e) => draw(e.target.value));
 }
 
 /* ---------------- settings ---------------- */

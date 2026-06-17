@@ -466,11 +466,45 @@ ul.todo li.checked { color: var(--ink-soft); text-decoration: line-through; text
 .search-wrap svg { position: absolute; left: 0.9rem; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; color: var(--ink-soft); }
 .ref-cat { margin-top: 1.8rem; }
 .ref-cat h3 { font-family: "Geist Mono", monospace; color: var(--accent); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.12em; }
-.ref-item { padding: 0.8rem 0; border-bottom: 1px solid var(--hairline); }
-.ref-item .term { font-weight: 600; font-family: "Geist Mono", monospace; }
+
+/* Level filter pills (101 / 201 / 301) */
+.ref-levels { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.4rem; }
+.ref-lvl-pill {
+  font-family: "Geist Mono", monospace; font-size: 0.78rem; font-weight: 500;
+  padding: 0.4rem 0.85rem; border-radius: 999px; cursor: pointer;
+  border: 1px solid var(--glass-border); background: var(--glass);
+  color: var(--ink-soft); transition: transform 0.15s, background 0.15s, color 0.15s, border-color 0.15s;
+}
+.ref-lvl-pill:hover { transform: translateY(-1px); color: var(--ink); }
+.ref-lvl-pill.on { color: #fff; background: var(--accent); border-color: var(--accent); }
+.ref-lvl-pill.lvl-101.on { background: #5f9e63; border-color: #5f9e63; }
+.ref-lvl-pill.lvl-201.on { background: #c98a3c; border-color: #c98a3c; }
+.ref-lvl-pill.lvl-301.on { background: #b5564a; border-color: #b5564a; }
+
+/* Level sections */
+.ref-level { margin-top: 2rem; }
+.ref-level-head { display: flex; align-items: baseline; gap: 0.6rem; flex-wrap: wrap; padding-bottom: 0.5rem; border-bottom: 2px solid var(--hairline); }
+.ref-level-badge {
+  font-family: "Geist Mono", monospace; font-size: 0.78rem; font-weight: 600; color: #fff;
+  padding: 0.12rem 0.5rem; border-radius: 999px; background: var(--accent);
+}
+.ref-level.lvl-101 .ref-level-badge { background: #5f9e63; }
+.ref-level.lvl-201 .ref-level-badge { background: #c98a3c; }
+.ref-level.lvl-301 .ref-level-badge { background: #b5564a; }
+.ref-level-head h3 { font-family: "Geist Mono", monospace; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.1em; margin: 0; color: var(--ink); }
+.ref-level-blurb { color: var(--ink-soft); font-size: 0.85rem; font-style: italic; }
+
+.ref-item { padding: 0.8rem 0 0.8rem 0.9rem; border-bottom: 1px solid var(--hairline); border-left: 3px solid transparent; }
+.ref-item.lvl-101 { border-left-color: rgba(95, 158, 99, 0.55); }
+.ref-item.lvl-201 { border-left-color: rgba(201, 138, 60, 0.55); }
+.ref-item.lvl-301 { border-left-color: rgba(181, 86, 74, 0.55); }
+.ref-item .term { font-weight: 600; font-family: "Geist Mono", monospace; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+.ref-item .ref-tag { font-family: "Geist Mono", monospace; font-size: 0.66rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-soft); background: var(--accent-soft); border-radius: 999px; padding: 0.1rem 0.5rem; }
 .ref-item .def { color: var(--ink); margin: 0.2rem 0; }
 .ref-item .ref-meta { color: var(--ink-soft); font-size: 0.9rem; font-style: italic; }
 .ref-item .ref-ex { font-family: "Geist Mono", monospace; font-size: 0.82rem; background: var(--code-bg); border-radius: 6px; padding: 0.1rem 0.4rem; display: inline-block; margin-top: 0.2rem; }
+.ref-item .ref-learn { display: inline-block; margin-top: 0.4rem; font-size: 0.82rem; font-weight: 500; color: var(--accent-strong); border-bottom: none; }
+.ref-item .ref-learn:hover { color: var(--accent); text-decoration: underline; }
 .no-results { color: var(--ink-soft); padding: 1.5rem 0; text-align: center; }
 
 /* ---------- Floating dock (notes + assistant) ---------- */
