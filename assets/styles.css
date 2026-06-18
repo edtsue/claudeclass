@@ -250,6 +250,16 @@ kbd {
 }
 .outcomes-h { display: block; font-family: "Geist Mono", monospace; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--accent-strong); margin-bottom: 0.3rem; }
 
+/* Homework-prep callout (sign-up links before class) */
+.prep {
+  background: var(--glass-2);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-sm);
+  padding: 0.9rem 1.05rem;
+  margin: 1rem 0;
+}
+.prep > h3:first-child { margin-top: 0; color: var(--accent-strong); }
+
 /* Collapsible full written steps (setup) */
 .full-steps { margin-top: 1.6rem; border-top: 1px solid var(--hairline); }
 .full-steps > summary { cursor: pointer; font-weight: 600; list-style: none; padding: 0.9rem 0 0.4rem; color: var(--accent-strong); }

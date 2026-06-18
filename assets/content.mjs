@@ -312,6 +312,24 @@ $p = [Environment]::GetEnvironmentVariable("PATH", "User")
     unlock: '2026-06-25T11:00:00Z', // Thu Jun 25, 2026, 7:00 AM New York time
     sections: [
       {
+        key: 'class2.prep',
+        html: `
+          <div class="prep">
+            <h3>📋 Homework prep — do this <em>before</em> class</h3>
+            <p>We move fast today, so create these three free accounts ahead of time. Each takes about a minute. Tip: sign up for Vercel <em>with</em> your GitHub account to save a step.</p>
+            <ul class="links">
+              <li><a href="https://github.com/signup" target="_blank" rel="noopener">Sign up for GitHub ↗</a>
+                <span class="hint">Free — stores your project online and keeps every version.</span></li>
+              <li><a href="https://vercel.com/signup" target="_blank" rel="noopener">Sign up for Vercel ↗</a>
+                <span class="hint">Free — publishes your app to a live link. Choose <strong>“Continue with GitHub.”</strong></span></li>
+              <li><a href="https://supabase.com/dashboard/sign-up" target="_blank" rel="noopener">Sign up for Supabase ↗</a>
+                <span class="hint">Free — the database that remembers your data. You can also use <strong>“Continue with GitHub.”</strong></span></li>
+            </ul>
+            <p class="hint">Already have these? You're all set — see you in class. 🎉</p>
+          </div>
+        `,
+      },
+      {
         key: 'class2.outcomes',
         html: `<div class="outcomes"><span class="outcomes-h">By the end of today you'll be able to…</span> put your app on the internet with a shareable link — <strong>and give it a memory, so it remembers things even after you close the tab.</strong></div>`,
       },
